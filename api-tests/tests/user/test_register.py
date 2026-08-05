@@ -1,15 +1,34 @@
-import uuid
 import pytest
+import uuid
+import time
 
 
 # 201
-def test_register_success(user_api):
+def test_register_success(user_api, message_api):
+    email = f"{uuid.uuid4().hex}@test.com"
+
     response = user_api.register(
-        f"{uuid.uuid4().hex}@test.com",
+        email,
         "password123",
     )
 
     assert response.status_code == 201
+
+    # Wait for Kafka consumer to process the message
+    time.sleep(0.5)
+
+    response = message_api.get_messages()
+
+    assert response.status_code == 200
+
+    body = response.json()
+
+    assert "messages" in body
+
+    assert (
+        f"{email}: Welcome! - Спасибо за регистрацию!"
+        in body["messages"]
+    )
 
 
 # 400

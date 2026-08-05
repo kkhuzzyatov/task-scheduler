@@ -6,6 +6,7 @@ import requests
 from auth_client import ApiAuthClient
 from user_client import ApiUserClient
 from task_client import ApiTaskClient
+from message_client import ApiMessageClient
 
 
 @pytest.fixture
@@ -72,3 +73,7 @@ def authenticated_task_api(create_authenticated_user):
     from task_client import ApiTaskClient
 
     return ApiTaskClient(user.session)
+
+@pytest.fixture
+def message_api(session):
+    return ApiMessageClient(session)

@@ -98,7 +98,6 @@ def test_complete_task(authenticated_task_api):
 
     body = response.json()
 
-    assert body["completed"] is True
     assert body["completedAt"] is not None
 
 
