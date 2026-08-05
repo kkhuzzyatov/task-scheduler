@@ -15,11 +15,12 @@ public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  private UUID id;
+  @Column(name = "user_id")
+  private UUID userId;
 
   @Column(nullable = false, unique = true)
   private String email;
 
-  @Column(nullable = false)
+  @Column(name = "password_hash", nullable = false)
   private String passwordHash;
 }
