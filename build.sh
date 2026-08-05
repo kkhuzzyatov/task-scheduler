@@ -29,6 +29,7 @@ cleanup_docker_resources() {
   local services=(
     "task-tracker-backend"
     "task-tracker-email-sender"
+    "task-tracker-summarization-server"
   )
 
   echo "==="
@@ -47,6 +48,7 @@ cleanup_docker_resources() {
 
 build_maven_project "task-tracker-backend"
 build_maven_project "task-tracker-email-sender"
+build_maven_project "task-tracker-summarization-server"
 
 cleanup_docker_resources
 

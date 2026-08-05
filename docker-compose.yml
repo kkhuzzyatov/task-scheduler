@@ -31,6 +31,19 @@ services:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
 
 
+  task-tracker-summarization-server:
+    build:
+      context: ./task-tracker-summarization-server
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_MODEL: ${OPENAI_MODEL}
+
+
   postgres:
     image: postgres:16-alpine
     environment:
