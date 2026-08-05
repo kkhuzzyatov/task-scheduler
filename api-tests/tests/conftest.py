@@ -5,6 +5,7 @@ import requests
 
 from auth_client import ApiAuthClient
 from user_client import ApiUserClient
+from task_client import ApiTaskClient
 
 
 @pytest.fixture
@@ -58,3 +59,16 @@ def create_authenticated_user():
         return auth, user
 
     return factory
+
+
+@pytest.fixture
+def task_api(session):
+    return ApiTaskClient(session)
+
+@pytest.fixture
+def authenticated_task_api(create_authenticated_user):
+    auth, user = create_authenticated_user()
+
+    from task_client import ApiTaskClient
+
+    return ApiTaskClient(user.session)
