@@ -42,7 +42,7 @@ public class AuthService {
       throw new IllegalArgumentException("Неверный email или пароль");
     }
 
-    String token = jwtProvider.generate(user.getId(), user.getEmail());
+    String token = jwtProvider.generate(user.getUserId(), user.getEmail());
 
     return new LoginResult(token);
   }
