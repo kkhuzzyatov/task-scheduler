@@ -41,3 +41,12 @@ class ApiTaskClient:
             f"{TASK_URL}/{task_id}",
             timeout=10,
         )
+
+    def complete_task(self, task_id: str):
+        return self.session.patch(
+            f"{TASK_URL}/{task_id}",
+            json={
+                "completed": True,
+            },
+            timeout=10,
+        )
