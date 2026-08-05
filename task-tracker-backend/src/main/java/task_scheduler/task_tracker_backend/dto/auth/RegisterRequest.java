@@ -1,4 +1,4 @@
-package task_scheduler.task_tracker_backend.dto;
+package task_scheduler.task_tracker_backend.dto.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

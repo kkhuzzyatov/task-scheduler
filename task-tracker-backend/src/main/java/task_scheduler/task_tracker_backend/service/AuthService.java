@@ -5,7 +5,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import task_scheduler.task_tracker_backend.dto.LoginResult;
+import task_scheduler.task_tracker_backend.dto.auth.LoginResult;
 import task_scheduler.task_tracker_backend.exception.UserAlreadyExistsException;
 import task_scheduler.task_tracker_backend.exception.UserIsNotExistException;
 import task_scheduler.task_tracker_backend.jwt.JwtProvider;

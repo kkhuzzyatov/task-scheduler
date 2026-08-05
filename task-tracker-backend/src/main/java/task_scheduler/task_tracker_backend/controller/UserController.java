@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import task_scheduler.task_tracker_backend.dto.RegisterRequest;
+import task_scheduler.task_tracker_backend.dto.auth.RegisterRequest;
 import task_scheduler.task_tracker_backend.service.AuthService;
 
 @RestController

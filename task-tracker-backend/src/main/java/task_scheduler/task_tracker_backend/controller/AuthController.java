@@ -8,9 +8,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import task_scheduler.task_tracker_backend.dto.AuthResponse;
-import task_scheduler.task_tracker_backend.dto.LoginRequest;
-import task_scheduler.task_tracker_backend.dto.LoginResult;
+import task_scheduler.task_tracker_backend.dto.auth.AuthResponse;
+import task_scheduler.task_tracker_backend.dto.auth.LoginRequest;
+import task_scheduler.task_tracker_backend.dto.auth.LoginResult;
 import task_scheduler.task_tracker_backend.service.AuthService;
 
 @RestController
