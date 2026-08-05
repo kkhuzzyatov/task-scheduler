@@ -63,8 +63,6 @@ public class AuthService {
   }
 
   public User getUserById(UUID id) {
-    return userRepository
-        .findById(id)
-        .orElseThrow((() -> new UserIsNotExistException("user is not exist")));
+    return userRepository.findById(id).orElseThrow((UserIsNotExistException::new));
   }
 }
