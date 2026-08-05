@@ -10,8 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import task_scheduler.task_tracker_backend.dto.auth.RegisterRequest;
+import task_scheduler.task_tracker_backend.dto.user.RegisterRequest;
+import task_scheduler.task_tracker_backend.dto.user.UserDto;
 import task_scheduler.task_tracker_backend.service.AuthService;
+import task_scheduler.task_tracker_backend.user.User;
 
 @RestController
 @RequestMapping("/api/user")
@@ -44,6 +46,11 @@ public class UserController {
   @GetMapping
   public ResponseEntity<?> getMe(@RequestHeader("Authorization") String token) {
     UUID userId = authService.getMyUuid(token);
-    return ResponseEntity.ok(authService.getUserById(userId));
+
+    User user = authService.getUserById(userId);
+
+    UserDto userDto = UserDto.builder().id(user.getUserId()).email(user.getEmail()).build();
+
+    return ResponseEntity.ok(userDto);
   }
 }
