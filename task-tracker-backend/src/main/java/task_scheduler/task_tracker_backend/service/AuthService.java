@@ -6,9 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import task_scheduler.task_tracker_backend.dto.auth.LoginResult;
+import task_scheduler.task_tracker_backend.dto.email.EmailTask;
 import task_scheduler.task_tracker_backend.exception.UserAlreadyExistsException;
 import task_scheduler.task_tracker_backend.exception.UserIsNotExistException;
 import task_scheduler.task_tracker_backend.jwt.JwtProvider;
+import task_scheduler.task_tracker_backend.kafka.EmailProducer;
 import task_scheduler.task_tracker_backend.user.User;
 import task_scheduler.task_tracker_backend.user.UserRepository;
 
@@ -19,6 +21,7 @@ public class AuthService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtProvider jwtProvider;
+  private final EmailProducer emailProducer;
 
   public void register(String email, String password) {
     if (userRepository.existsByEmail(email)) {
@@ -30,6 +33,13 @@ public class AuthService {
     user.setPasswordHash(passwordEncoder.encode(password));
 
     userRepository.save(user);
+
+    emailProducer.send(
+        EmailTask.builder()
+            .recipient(user.getEmail())
+            .subject("Welcome!")
+            .text("Спасибо за регистрацию!")
+            .build());
   }
 
   public LoginResult login(String email, String password) {
