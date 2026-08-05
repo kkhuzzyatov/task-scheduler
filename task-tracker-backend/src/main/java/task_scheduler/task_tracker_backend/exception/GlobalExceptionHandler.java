@@ -31,41 +31,42 @@ public class GlobalExceptionHandler {
         .log("Ошибка некорректного аргумента");
 
     return buildResponse(ex, HttpStatus.BAD_REQUEST, "Некорректный запрос");
-  }  @ExceptionHandler(UserIsNotExistException.class)
+  }
+
+  @ExceptionHandler(UserIsNotExistException.class)
   public ResponseEntity<Map<String, String>> handleUserIsNotExistException(
-          UserIsNotExistException ex) {
+      UserIsNotExistException ex) {
 
     log.atError()
-            .setCause(ex)
-            .addKeyValue("исключение", ex.getClass().getSimpleName())
-            .addKeyValue("сообщение", ex.getMessage())
-            .log("Пользователь не найден");
+        .setCause(ex)
+        .addKeyValue("исключение", ex.getClass().getSimpleName())
+        .addKeyValue("сообщение", ex.getMessage())
+        .log("Пользователь не найден");
 
     return buildResponse(ex, HttpStatus.NOT_FOUND, "Пользователь не найден");
   }
 
   @ExceptionHandler(TaskNotFoundException.class)
-  public ResponseEntity<Map<String, String>> handleTaskNotFoundException(
-          TaskNotFoundException ex) {
+  public ResponseEntity<Map<String, String>> handleTaskNotFoundException(TaskNotFoundException ex) {
 
     log.atError()
-            .setCause(ex)
-            .addKeyValue("исключение", ex.getClass().getSimpleName())
-            .addKeyValue("сообщение", ex.getMessage())
-            .log("Задача не найдена");
+        .setCause(ex)
+        .addKeyValue("исключение", ex.getClass().getSimpleName())
+        .addKeyValue("сообщение", ex.getMessage())
+        .log("Задача не найдена");
 
     return buildResponse(ex, HttpStatus.NOT_FOUND, "Задача не найдена");
   }
 
   @ExceptionHandler(TaskAccessDeniedException.class)
   public ResponseEntity<Map<String, String>> handleTaskAccessDeniedException(
-          TaskAccessDeniedException ex) {
+      TaskAccessDeniedException ex) {
 
     log.atError()
-            .setCause(ex)
-            .addKeyValue("исключение", ex.getClass().getSimpleName())
-            .addKeyValue("сообщение", ex.getMessage())
-            .log("Нет доступа к задаче");
+        .setCause(ex)
+        .addKeyValue("исключение", ex.getClass().getSimpleName())
+        .addKeyValue("сообщение", ex.getMessage())
+        .log("Нет доступа к задаче");
 
     return buildResponse(ex, HttpStatus.FORBIDDEN, "Нет доступа к задаче");
   }

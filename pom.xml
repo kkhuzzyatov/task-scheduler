@@ -26,6 +26,7 @@
 
     <modules>
         <module>task-tracker-backend</module>
+        <module>task-tracker-email-sender</module>
     </modules>
 
     <scm>
