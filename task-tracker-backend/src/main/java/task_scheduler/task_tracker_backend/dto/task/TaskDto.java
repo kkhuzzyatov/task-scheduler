@@ -6,4 +6,4 @@ import lombok.Builder;
 
 @Builder
 public record TaskDto(
-    UUID id, String title, String description, boolean completed, LocalDateTime completedAt) {}
+    UUID id, String title, String description, LocalDateTime completedAt) {}

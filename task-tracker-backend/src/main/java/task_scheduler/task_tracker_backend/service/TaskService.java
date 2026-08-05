@@ -97,7 +97,6 @@ public class TaskService {
         .id(task.getTaskId())
         .title(task.getTitle())
         .description(task.getDescription())
-        .completed(task.getCompletedAt() != null)
         .completedAt(task.getCompletedAt())
         .build();
   }
