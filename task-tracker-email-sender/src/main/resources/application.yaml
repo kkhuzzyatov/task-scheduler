@@ -1,0 +1,11 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: task-tracker-email-sender
+
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: email-service
