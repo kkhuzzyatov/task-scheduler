@@ -1,4 +1,4 @@
-package task_scheduler.task_tracker_backend.config;
+package task_scheduler.task_tracker_backend.security;
 
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -23,9 +23,11 @@ import task_scheduler.task_tracker_backend.jwt.JwtFilter;
 public class SecurityConfig {
 
   private final JwtFilter jwtFilter;
+  private final InternalApiKeyFilter internalApiKeyFilter;
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) {
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
     http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .csrf(csrf -> csrf.disable())
         .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
@@ -38,8 +40,11 @@ public class SecurityConfig {
                     .requestMatchers(
                         "/swagger-ui/**", "/api-docs/**", "/openapi.yml", "/v3/api-docs")
                     .permitAll()
+                    .requestMatchers("/internal/**")
+                    .authenticated()
                     .anyRequest()
                     .authenticated())
+        .addFilterBefore(internalApiKeyFilter, UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
         .exceptionHandling(
             ex ->
@@ -68,12 +73,17 @@ public class SecurityConfig {
 
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
+
     CorsConfiguration config = new CorsConfiguration();
+
     config.setAllowedOrigins(List.of("http://localhost:5173"));
     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     config.setAllowedHeaders(List.of("*"));
+
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
     source.registerCorsConfiguration("/api/**", config);
+
     return source;
   }
 

@@ -86,6 +86,25 @@ public class TaskService {
     task.delete();
   }
 
+  @Transactional(readOnly = true)
+  public List<TaskDto> getCompletedTasksForPeriod(
+      UUID userId, LocalDateTime from, LocalDateTime to) {
+
+    return taskRepository
+        .findAllByUserUserIdAndCompletedAtBetweenAndDeletedAtIsNull(userId, from, to)
+        .stream()
+        .map(this::mapToDto)
+        .toList();
+  }
+
+  @Transactional(readOnly = true)
+  public List<TaskDto> getUncompletedTasks(UUID userId) {
+
+    return taskRepository.findAllByUserUserIdAndCompletedAtIsNullAndDeletedAtIsNull(userId).stream()
+        .map(this::mapToDto)
+        .toList();
+  }
+
   private User getUser(UUID userId) {
 
     return userRepository.findById(userId).orElseThrow(UserIsNotExistException::new);

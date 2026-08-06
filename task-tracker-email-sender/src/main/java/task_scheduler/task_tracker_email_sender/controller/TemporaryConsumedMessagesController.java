@@ -5,7 +5,9 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import task_scheduler.task_tracker_email_sender.dto.ReportResponse;
 import task_scheduler.task_tracker_email_sender.storage.TemporaryConsumedMessagesStorage;
 
 @RestController
@@ -18,5 +20,10 @@ public class TemporaryConsumedMessagesController {
   @GetMapping
   public Map<String, List<String>> getMessages() {
     return Map.of("messages", storage.getMessages());
+  }
+
+  @GetMapping("/reports")
+  public List<ReportResponse> getReports(@RequestParam String email) {
+    return storage.getReportsByEmail(email);
   }
 }

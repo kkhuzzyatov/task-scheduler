@@ -1,5 +1,6 @@
 package task_scheduler.task_tracker_backend.task;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,4 +15,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
   List<Task> findAllByUserUserIdAndCompletedAtIsNullAndDeletedAtIsNull(UUID userId);
 
   List<Task> findAllByUserUserIdAndCompletedAtIsNotNullAndDeletedAtIsNull(UUID userId);
+
+  List<Task> findAllByUserUserIdAndCompletedAtBetweenAndDeletedAtIsNull(
+      UUID userId, LocalDateTime from, LocalDateTime to);
 }

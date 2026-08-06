@@ -5,7 +5,18 @@ spring:
   application:
     name: task-tracker-summarization-server
 
-openai:
-  base-url: ${OPENAI_BASE_URL}
-  api-key: ${OPENAI_API_KEY}
-  model: ${OPENAI_MODEL}
+  kafka:
+    bootstrap-servers: kafka:9092
+
+    consumer:
+      group-id: report-requests
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.value.default.type: task_scheduler.task_tracker_summarization_server.dto.ReportRequest
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer

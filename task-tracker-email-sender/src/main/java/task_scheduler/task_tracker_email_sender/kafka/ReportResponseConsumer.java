@@ -3,20 +3,18 @@ package task_scheduler.task_tracker_email_sender.kafka;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import task_scheduler.task_tracker_email_sender.dto.EmailTask;
+import task_scheduler.task_tracker_email_sender.dto.ReportResponse;
 import task_scheduler.task_tracker_email_sender.storage.TemporaryConsumedMessagesStorage;
 
 @Component
 @RequiredArgsConstructor
-public class EmailConsumer {
+public class ReportResponseConsumer {
 
   private final TemporaryConsumedMessagesStorage storage;
 
-  @KafkaListener(topics = "email-tasks")
-  public void consume(EmailTask task) {
+  @KafkaListener(topics = "report-response")
+  public void consume(ReportResponse response) {
 
-    System.out.println("Received: " + task);
-
-    storage.addMessage(task.getRecipient() + ": " + task.getSubject() + " - " + task.getText());
+    storage.addReport(response);
   }
 }
