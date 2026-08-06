@@ -28,6 +28,7 @@
         <module>task-tracker-backend</module>
         <module>task-tracker-email-sender</module>
         <module>task-tracker-summarization-server</module>
+        <module>task-tracker-scheduler</module>
     </modules>
 
     <scm>
