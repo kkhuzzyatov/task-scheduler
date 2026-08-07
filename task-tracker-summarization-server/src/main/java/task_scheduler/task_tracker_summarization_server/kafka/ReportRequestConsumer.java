@@ -20,7 +20,9 @@ public class ReportRequestConsumer {
   private final ReportResponseProducer reportResponseProducer;
   private final LogProperties logProperties;
 
-  @KafkaListener(topics = "report-requests")
+  @KafkaListener(
+      topics = "report-requests",
+      containerFactory = "reportRequestKafkaListenerContainerFactory")
   public void consume(ConsumerRecord<String, ReportRequest> record) {
 
     ReportRequest request = record.value();
