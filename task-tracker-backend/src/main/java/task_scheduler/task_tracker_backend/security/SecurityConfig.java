@@ -41,7 +41,11 @@ public class SecurityConfig {
                     .requestMatchers("/api/auth/login")
                     .permitAll()
                     .requestMatchers(
-                            "/actuator/**", "/swagger-ui/**", "/api-docs/**", "/openapi.yml", "/v3/api-docs")
+                        "/actuator/**",
+                        "/swagger-ui/**",
+                        "/api-docs/**",
+                        "/openapi.yml",
+                        "/v3/api-docs")
                     .permitAll()
                     .requestMatchers("/internal/**")
                     .permitAll()
