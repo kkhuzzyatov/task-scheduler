@@ -4,16 +4,12 @@ server:
 spring:
   application:
     name: task-tracker-scheduler
-  kafka:
-    bootstrap-servers: kafka:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      properties:
-        spring.json.add.type.headers: false
 
 internal:
   api-key: ${INTERNAL_API_KEY}
 
 backend:
   url: http://task-tracker-backend:8080
+
+kafka:
+  bootstrap-servers: kafka:9092
