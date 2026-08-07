@@ -2,7 +2,32 @@ global:
   scrape_interval: 15s
 
 scrape_configs:
-  - job_name: prometheus
+
+  - job_name: backend
+    metrics_path: /actuator/prometheus
     static_configs:
       - targets:
-          - localhost:9090
+          - task-tracker-backend:8080
+
+  - job_name: email-sender
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets:
+          - task-tracker-email-sender:8081
+
+  - job_name: scheduler
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets:
+          - task-tracker-scheduler:8083
+
+  - job_name: summarization
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets:
+          - task-tracker-summarization-server:8082
+
+  - job_name: cadvisor
+    static_configs:
+      - targets:
+          - cadvisor:8080
