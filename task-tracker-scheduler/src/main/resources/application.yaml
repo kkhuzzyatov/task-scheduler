@@ -13,3 +13,20 @@ backend:
 
 kafka:
   bootstrap-servers: kafka:9092
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - prometheus
+
+  endpoint:
+    prometheus:
+      access: unrestricted
+
+  metrics:
+    tags:
+      application: ${spring.application.name}

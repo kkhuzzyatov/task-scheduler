@@ -3,7 +3,8 @@ server:
 
 spring:
   application:
-    name: task-tracker-email-sender
+    name: task-tracker-backend
+
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/backend_db}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
@@ -25,3 +26,21 @@ internal:
 
 kafka:
   bootstrap-servers: kafka:9092
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - prometheus
+
+  endpoint:
+    prometheus:
+      access: unrestricted
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
