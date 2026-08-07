@@ -12,7 +12,9 @@ public class ReportResponseConsumer {
 
   private final TemporaryConsumedMessagesStorage storage;
 
-  @KafkaListener(topics = "report-response")
+  @KafkaListener(
+      topics = "report-response",
+      containerFactory = "reportKafkaListenerContainerFactory")
   public void consume(ReportResponse response) {
 
     storage.addReport(response);

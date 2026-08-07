@@ -12,7 +12,7 @@ public class EmailConsumer {
 
   private final TemporaryConsumedMessagesStorage storage;
 
-  @KafkaListener(topics = "email-tasks")
+  @KafkaListener(topics = "email-tasks", containerFactory = "emailKafkaListenerContainerFactory")
   public void consume(EmailTask task) {
 
     System.out.println("Received: " + task);
