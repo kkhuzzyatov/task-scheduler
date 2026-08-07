@@ -48,9 +48,10 @@
         <openapi-generator-maven-plugin.version>7.19.0</openapi-generator-maven-plugin.version>
         <spring-cloud.version>2025.0.0</spring-cloud.version>
 
-        <maven.version>3.9.12</maven.version>
-
         <spotless-maven-plugin.version>3.2.1</spotless-maven-plugin.version>
+
+        <spotbugs-maven-plugin.version>4.9.3.0</spotbugs-maven-plugin.version>
+        <pmd-maven-plugin.version>3.26.0</pmd-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -133,6 +134,47 @@
                             </path>
                         </annotationProcessorPaths>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.github.spotbugs</groupId>
+                    <artifactId>spotbugs-maven-plugin</artifactId>
+                    <version>${spotbugs-maven-plugin.version}</version>
+                    <configuration>
+                        <effort>Max</effort>
+                        <threshold>Low</threshold>
+                        <failOnError>true</failOnError>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>spotbugs-check</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>${pmd-maven-plugin.version}</version>
+                    <configuration>
+                        <rulesets>
+                            <ruleset>category/java/errorprone.xml</ruleset>
+                            <ruleset>category/java/bestpractices.xml</ruleset>
+                        </rulesets>
+                        <failOnViolation>true</failOnViolation>
+                        <printFailingErrors>true</printFailingErrors>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>pmd-check</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
