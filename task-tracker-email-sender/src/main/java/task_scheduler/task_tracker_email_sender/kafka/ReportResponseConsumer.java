@@ -27,6 +27,6 @@ public class ReportResponseConsumer {
         .addKeyValue("userId", response.userEmail())
         .log("Report response received from Kafka");
 
-    emailService.processReport(response);
+    emailService.sendReportEmail(response);
   }
 }
