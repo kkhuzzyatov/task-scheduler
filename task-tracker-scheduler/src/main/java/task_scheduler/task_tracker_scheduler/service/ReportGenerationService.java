@@ -7,6 +7,7 @@ import task_scheduler.task_tracker_scheduler.client.BackendClient;
 import task_scheduler.task_tracker_scheduler.dto.DailyReportData;
 import task_scheduler.task_tracker_scheduler.kafka.ReportRequestProducer;
 import task_scheduler.task_tracker_scheduler.mapper.ReportRequestMapper;
+import task_scheduler.task_tracker_scheduler.properties.InternalApiProperties;
 
 @Service
 @RequiredArgsConstructor
@@ -16,9 +17,19 @@ public class ReportGenerationService {
   private final ReportRequestMapper reportRequestMapper;
   private final ReportRequestProducer reportRequestProducer;
 
+  private final InternalApiProperties internalApiProperties;
+
   public void generateReports() {
 
-    List<DailyReportData> reports = backendClient.getDailyReports();
+    List<DailyReportData> reports = backendClient.getDailyReports(internalApiProperties.apiKey());
+    System.out.println("reports number: " + reports.size());
+    reports.forEach(
+        report ->
+            System.out.println(
+                "email: "
+                    + report.userEmail()
+                    + " total tasks number: "
+                    + (report.uncompletedTasks().size() + report.completedTasks().size())));
 
     reports.stream()
         .filter(this::hasTasks)
