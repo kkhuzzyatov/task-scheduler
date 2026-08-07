@@ -41,7 +41,7 @@ public class SecurityConfig {
                         "/swagger-ui/**", "/api-docs/**", "/openapi.yml", "/v3/api-docs")
                     .permitAll()
                     .requestMatchers("/internal/**")
-                    .authenticated()
+                    .permitAll()
                     .anyRequest()
                     .authenticated())
         .addFilterBefore(internalApiKeyFilter, UsernamePasswordAuthenticationFilter.class)
