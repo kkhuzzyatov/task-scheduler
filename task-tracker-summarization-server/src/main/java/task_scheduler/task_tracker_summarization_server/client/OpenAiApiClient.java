@@ -3,35 +3,88 @@ package task_scheduler.task_tracker_summarization_server.client;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClient;
+import task_scheduler.task_tracker_summarization_server.properties.LogProperties;
 import task_scheduler.task_tracker_summarization_server.properties.OpenAiProperties;
 
+@Slf4j
 @RequiredArgsConstructor
 public class OpenAiApiClient {
 
   private final RestClient restClient;
   private final OpenAiProperties properties;
+  private final LogProperties logProperties;
 
-  public String generateSummary(String prompt) {
+  public String generateSummary(String prompt, String userId) {
 
-    OpenAiResponse response =
-        restClient
-            .post()
-            .uri(properties.baseUrl() + "/chat/completions")
-            .header("Authorization", "Bearer " + properties.apiKey())
-            .header("Content-Type", "application/json")
-            .body(
-                Map.of(
-                    "model", properties.model(),
-                    "messages", List.of(Map.of("role", "user", "content", prompt))))
-            .retrieve()
-            .body(OpenAiResponse.class);
+    long start = System.currentTimeMillis();
 
-    if (response == null || response.choices() == null || response.choices().isEmpty()) {
-      throw new IllegalStateException("OpenAI response contains no choices");
+    log.atDebug()
+        .addKeyValue("service", logProperties.name())
+        .addKeyValue("event", "openai_request_started")
+        .addKeyValue("model", properties.model())
+        .addKeyValue("userId", userId)
+        .log("OpenAI request started");
+
+    try {
+
+      OpenAiResponse response =
+          restClient
+              .post()
+              .uri(properties.baseUrl() + "/chat/completions")
+              .header("Authorization", "Bearer " + properties.apiKey())
+              .header("Content-Type", "application/json")
+              .body(
+                  Map.of(
+                      "model",
+                      properties.model(),
+                      "messages",
+                      List.of(Map.of("role", "user", "content", prompt))))
+              .retrieve()
+              .body(OpenAiResponse.class);
+
+      if (response == null || response.choices() == null || response.choices().isEmpty()) {
+        throw new IllegalStateException("OpenAI response contains no choices");
+      }
+
+      long duration = System.currentTimeMillis() - start;
+
+      log.atInfo()
+          .addKeyValue("service", logProperties.name())
+          .addKeyValue("event", "report_summary_generated")
+          .addKeyValue("userId", userId)
+          .addKeyValue("durationMs", duration)
+          .log("OpenAI response received");
+
+      return response.choices().get(0).message().content();
+
+    } catch (HttpStatusCodeException e) {
+
+      log.atError()
+          .setCause(e)
+          .addKeyValue("service", logProperties.name())
+          .addKeyValue("event", "openai_request_failed")
+          .addKeyValue("userId", userId)
+          .addKeyValue("statusCode", e.getStatusCode().value())
+          .addKeyValue("exception", e.getClass().getSimpleName())
+          .log("OpenAI request failed");
+
+      throw e;
+
+    } catch (Exception e) {
+
+      log.atError()
+          .setCause(e)
+          .addKeyValue("service", logProperties.name())
+          .addKeyValue("event", "openai_request_failed")
+          .addKeyValue("userId", userId)
+          .addKeyValue("exception", e.getClass().getSimpleName())
+          .log("OpenAI request failed");
+
+      throw e;
     }
-
-    return response.choices().get(0).message().content();
   }
 
   public record OpenAiResponse(List<Choice> choices) {}
