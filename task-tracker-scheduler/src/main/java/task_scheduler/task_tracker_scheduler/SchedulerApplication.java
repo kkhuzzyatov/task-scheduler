@@ -2,11 +2,15 @@ package task_scheduler.task_tracker_scheduler;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
+@ConfigurationPropertiesScan
 @EnableFeignClients
 @EnableKafka
+@EnableScheduling
 @SpringBootApplication
 public class SchedulerApplication {
 
