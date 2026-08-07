@@ -2,6 +2,8 @@ server:
   port: 8080
 
 spring:
+  application:
+    name: task-tracker-email-sender
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/backend_db}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}

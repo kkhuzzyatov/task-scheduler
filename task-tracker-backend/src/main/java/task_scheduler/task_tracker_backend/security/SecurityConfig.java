@@ -16,7 +16,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import task_scheduler.task_tracker_backend.jwt.JwtFilter;
+import task_scheduler.task_tracker_backend.filters.CorrelationIdFilter;
+import task_scheduler.task_tracker_backend.filters.InternalApiKeyFilter;
+import task_scheduler.task_tracker_backend.filters.JwtFilter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ public class SecurityConfig {
 
   private final JwtFilter jwtFilter;
   private final InternalApiKeyFilter internalApiKeyFilter;
+  private final CorrelationIdFilter correlationIdFilter;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -44,6 +47,7 @@ public class SecurityConfig {
                     .permitAll()
                     .anyRequest()
                     .authenticated())
+        .addFilterBefore(correlationIdFilter, InternalApiKeyFilter.class)
         .addFilterBefore(internalApiKeyFilter, UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
         .exceptionHandling(
