@@ -2,7 +2,6 @@ package task_scheduler.task_tracker_summarization_server.config;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -19,61 +18,41 @@ import task_scheduler.task_tracker_summarization_server.properties.KafkaProperti
 @RequiredArgsConstructor
 public class KafkaConsumerConfig {
 
-    private final KafkaProperties kafkaProperties;
+  private final KafkaProperties kafkaProperties;
 
+  private Map<String, Object> consumerProps() {
 
-    private Map<String, Object> consumerProps() {
+    Map<String, Object> props = new HashMap<>();
 
-        Map<String, Object> props = new HashMap<>();
+    props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.bootstrapServers());
 
-        props.put(
-                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                kafkaProperties.bootstrapServers()
-        );
+    props.put(ConsumerConfig.GROUP_ID_CONFIG, "report-requests");
 
-        props.put(
-                ConsumerConfig.GROUP_ID_CONFIG,
-                "report-requests"
-        );
+    props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
-        props.put(
-                ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,
-                "earliest"
-        );
+    return props;
+  }
 
-        return props;
-    }
+  @Bean
+  public ConsumerFactory<String, ReportRequest> reportRequestConsumerFactory() {
 
+    JsonDeserializer<ReportRequest> deserializer =
+        new JsonDeserializer<>(ReportRequest.class, false);
 
-    @Bean
-    public ConsumerFactory<String, ReportRequest> reportRequestConsumerFactory() {
+    deserializer.addTrustedPackages("task_scheduler.task_tracker_summarization_server.dto");
 
-        JsonDeserializer<ReportRequest> deserializer =
-                new JsonDeserializer<>(ReportRequest.class, false);
+    return new DefaultKafkaConsumerFactory<>(
+        consumerProps(), new StringDeserializer(), deserializer);
+  }
 
-        deserializer.addTrustedPackages(
-                "task_scheduler.task_tracker_summarization_server.dto"
-        );
+  @Bean
+  public ConcurrentKafkaListenerContainerFactory<String, ReportRequest>
+      reportRequestKafkaListenerContainerFactory() {
 
-        return new DefaultKafkaConsumerFactory<>(
-                consumerProps(),
-                new StringDeserializer(),
-                deserializer
-        );
-    }
+    var factory = new ConcurrentKafkaListenerContainerFactory<String, ReportRequest>();
 
+    factory.setConsumerFactory(reportRequestConsumerFactory());
 
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, ReportRequest>
-    reportRequestKafkaListenerContainerFactory() {
-
-        var factory =
-                new ConcurrentKafkaListenerContainerFactory<String, ReportRequest>();
-
-        factory.setConsumerFactory(
-                reportRequestConsumerFactory()
-        );
-
-        return factory;
-    }
+    return factory;
+  }
 }
