@@ -15,8 +15,6 @@ public class EmailConsumer {
   @KafkaListener(topics = "email-tasks", containerFactory = "emailKafkaListenerContainerFactory")
   public void consume(EmailTask task) {
 
-    System.out.println("Received: " + task);
-
     storage.addMessage(task.getRecipient() + ": " + task.getSubject() + " - " + task.getText());
   }
 }

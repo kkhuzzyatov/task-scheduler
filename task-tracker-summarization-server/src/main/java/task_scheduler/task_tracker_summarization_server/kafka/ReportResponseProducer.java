@@ -13,8 +13,6 @@ public class ReportResponseProducer {
 
   public void send(ReportResponse response) {
 
-    System.out.println("Sending report response: " + response);
-
     kafkaTemplate.send("report-response", response.userEmail(), response);
   }
 }

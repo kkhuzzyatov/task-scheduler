@@ -22,14 +22,6 @@ public class ReportGenerationService {
   public void generateReports() {
 
     List<DailyReportData> reports = backendClient.getDailyReports(internalApiProperties.apiKey());
-    System.out.println("reports number: " + reports.size());
-    reports.forEach(
-        report ->
-            System.out.println(
-                "email: "
-                    + report.userEmail()
-                    + " total tasks number: "
-                    + (report.uncompletedTasks().size() + report.completedTasks().size())));
 
     reports.stream()
         .filter(this::hasTasks)

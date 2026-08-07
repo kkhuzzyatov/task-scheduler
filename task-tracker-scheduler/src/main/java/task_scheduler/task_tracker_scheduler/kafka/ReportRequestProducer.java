@@ -12,9 +12,6 @@ public class ReportRequestProducer {
   private final KafkaTemplate<String, Object> kafkaTemplate;
 
   public void send(ReportRequest request) {
-
-    System.out.println("Sending report request: " + request);
-
     kafkaTemplate.send("report-requests", request.getUserEmail(), request);
   }
 }
