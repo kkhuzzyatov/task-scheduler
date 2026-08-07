@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import task_scheduler.task_tracker_backend.dto.task.CreateTaskRequest;
@@ -11,17 +12,20 @@ import task_scheduler.task_tracker_backend.dto.task.TaskDto;
 import task_scheduler.task_tracker_backend.dto.task.UpdateTaskRequest;
 import task_scheduler.task_tracker_backend.exception.TaskNotFoundException;
 import task_scheduler.task_tracker_backend.exception.UserIsNotExistException;
+import task_scheduler.task_tracker_backend.properties.LogProperties;
 import task_scheduler.task_tracker_backend.task.Task;
 import task_scheduler.task_tracker_backend.task.TaskRepository;
 import task_scheduler.task_tracker_backend.user.User;
 import task_scheduler.task_tracker_backend.user.UserRepository;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TaskService {
 
   private final TaskRepository taskRepository;
   private final UserRepository userRepository;
+  private final LogProperties logProperties;
 
   @Transactional(readOnly = true)
   public List<TaskDto> getTasks(UUID userId) {
@@ -44,7 +48,16 @@ public class TaskService {
             .createdAt(LocalDateTime.now())
             .build();
 
-    return mapToDto(taskRepository.save(task));
+    Task savedTask = taskRepository.save(task);
+
+    log.atInfo()
+        .addKeyValue("service", logProperties.name())
+        .addKeyValue("event", "task_created")
+        .addKeyValue("userId", userId)
+        .addKeyValue("taskId", savedTask.getTaskId())
+        .log("Task created");
+
+    return mapToDto(savedTask);
   }
 
   @Transactional
@@ -53,24 +66,47 @@ public class TaskService {
     Task task =
         taskRepository
             .findByTaskIdAndUserUserIdAndDeletedAtIsNull(taskId, userId)
-            .orElseThrow(TaskNotFoundException::new);
+            .orElseThrow(
+                () -> {
+                  log.atWarn()
+                      .addKeyValue("service", logProperties.name())
+                      .addKeyValue("event", "task_access_denied")
+                      .addKeyValue("userId", userId)
+                      .addKeyValue("taskId", taskId)
+                      .log("Task access denied");
+
+                  return new TaskNotFoundException();
+                });
+
+    List<String> changedFields = new java.util.ArrayList<>();
 
     if (request.title() != null) {
       task.setTitle(request.title());
+      changedFields.add("title");
     }
 
     if (request.description() != null) {
       task.setDescription(request.description());
+      changedFields.add("description");
     }
 
     if (request.completed() != null) {
-
       if (request.completed()) {
         task.complete();
+        changedFields.add("completed");
       } else {
         task.uncomplete();
+        changedFields.add("completed");
       }
     }
+
+    log.atInfo()
+        .addKeyValue("service", logProperties.name())
+        .addKeyValue("event", "task_updated")
+        .addKeyValue("userId", userId)
+        .addKeyValue("taskId", taskId)
+        .addKeyValue("changedFields", changedFields)
+        .log("Task updated");
 
     return mapToDto(task);
   }
@@ -81,9 +117,26 @@ public class TaskService {
     Task task =
         taskRepository
             .findByTaskIdAndUserUserIdAndDeletedAtIsNull(taskId, userId)
-            .orElseThrow(TaskNotFoundException::new);
+            .orElseThrow(
+                () -> {
+                  log.atWarn()
+                      .addKeyValue("service", logProperties.name())
+                      .addKeyValue("event", "task_access_denied")
+                      .addKeyValue("userId", userId)
+                      .addKeyValue("taskId", taskId)
+                      .log("Task access denied");
+
+                  return new TaskNotFoundException();
+                });
 
     task.delete();
+
+    log.atInfo()
+        .addKeyValue("service", logProperties.name())
+        .addKeyValue("event", "task_deleted")
+        .addKeyValue("userId", userId)
+        .addKeyValue("taskId", taskId)
+        .log("Task deleted");
   }
 
   @Transactional(readOnly = true)
