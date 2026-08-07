@@ -7,13 +7,6 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
-  kafka:
-    bootstrap-servers: kafka:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      properties:
-        spring.json.type.mapping: EmailTask:task_scheduler.task_tracker_backend.dto.email.EmailTask
   jpa:
     hibernate:
       ddl-auto: validate
@@ -27,3 +20,6 @@ app:
 
 internal:
   api-key: ${INTERNAL_API_KEY}
+
+kafka:
+  bootstrap-servers: kafka:9092
