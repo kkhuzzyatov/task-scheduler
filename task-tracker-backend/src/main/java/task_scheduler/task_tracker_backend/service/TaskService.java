@@ -1,6 +1,7 @@
 package task_scheduler.task_tracker_backend.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +24,17 @@ import task_scheduler.task_tracker_backend.user.UserRepository;
 @RequiredArgsConstructor
 public class TaskService {
 
+  private static final String LOG_KEY_SERVICE = "service";
+  private static final String LOG_KEY_EVENT = "event";
+  private static final String LOG_KEY_USER_ID = "userId";
+  private static final String LOG_KEY_TASK_ID = "taskId";
+
   private final TaskRepository taskRepository;
   private final UserRepository userRepository;
   private final LogProperties logProperties;
 
   @Transactional(readOnly = true)
   public List<TaskDto> getTasks(UUID userId) {
-
     return taskRepository.findAllByUserUserIdAndDeletedAtIsNull(userId).stream()
         .map(this::mapToDto)
         .toList();
@@ -51,10 +56,10 @@ public class TaskService {
     Task savedTask = taskRepository.save(task);
 
     log.atInfo()
-        .addKeyValue("service", logProperties.name())
-        .addKeyValue("event", "task_created")
-        .addKeyValue("userId", userId)
-        .addKeyValue("taskId", savedTask.getTaskId())
+        .addKeyValue(LOG_KEY_SERVICE, logProperties.name())
+        .addKeyValue(LOG_KEY_EVENT, "task_created")
+        .addKeyValue(LOG_KEY_USER_ID, userId)
+        .addKeyValue(LOG_KEY_TASK_ID, savedTask.getTaskId())
         .log("Task created");
 
     return mapToDto(savedTask);
@@ -69,16 +74,16 @@ public class TaskService {
             .orElseThrow(
                 () -> {
                   log.atWarn()
-                      .addKeyValue("service", logProperties.name())
-                      .addKeyValue("event", "task_access_denied")
-                      .addKeyValue("userId", userId)
-                      .addKeyValue("taskId", taskId)
+                      .addKeyValue(LOG_KEY_SERVICE, logProperties.name())
+                      .addKeyValue(LOG_KEY_EVENT, "task_access_denied")
+                      .addKeyValue(LOG_KEY_USER_ID, userId)
+                      .addKeyValue(LOG_KEY_TASK_ID, taskId)
                       .log("Task access denied");
 
                   return new TaskNotFoundException();
                 });
 
-    List<String> changedFields = new java.util.ArrayList<>();
+    List<String> changedFields = new ArrayList<>();
 
     if (request.title() != null) {
       task.setTitle(request.title());
@@ -93,18 +98,18 @@ public class TaskService {
     if (request.completed() != null) {
       if (request.completed()) {
         task.complete();
-        changedFields.add("completed");
       } else {
         task.uncomplete();
-        changedFields.add("completed");
       }
+
+      changedFields.add("completed");
     }
 
     log.atInfo()
-        .addKeyValue("service", logProperties.name())
-        .addKeyValue("event", "task_updated")
-        .addKeyValue("userId", userId)
-        .addKeyValue("taskId", taskId)
+        .addKeyValue(LOG_KEY_SERVICE, logProperties.name())
+        .addKeyValue(LOG_KEY_EVENT, "task_updated")
+        .addKeyValue(LOG_KEY_USER_ID, userId)
+        .addKeyValue(LOG_KEY_TASK_ID, taskId)
         .addKeyValue("changedFields", changedFields)
         .log("Task updated");
 
@@ -120,10 +125,10 @@ public class TaskService {
             .orElseThrow(
                 () -> {
                   log.atWarn()
-                      .addKeyValue("service", logProperties.name())
-                      .addKeyValue("event", "task_access_denied")
-                      .addKeyValue("userId", userId)
-                      .addKeyValue("taskId", taskId)
+                      .addKeyValue(LOG_KEY_SERVICE, logProperties.name())
+                      .addKeyValue(LOG_KEY_EVENT, "task_access_denied")
+                      .addKeyValue(LOG_KEY_USER_ID, userId)
+                      .addKeyValue(LOG_KEY_TASK_ID, taskId)
                       .log("Task access denied");
 
                   return new TaskNotFoundException();
@@ -132,10 +137,10 @@ public class TaskService {
     task.delete();
 
     log.atInfo()
-        .addKeyValue("service", logProperties.name())
-        .addKeyValue("event", "task_deleted")
-        .addKeyValue("userId", userId)
-        .addKeyValue("taskId", taskId)
+        .addKeyValue(LOG_KEY_SERVICE, logProperties.name())
+        .addKeyValue(LOG_KEY_EVENT, "task_deleted")
+        .addKeyValue(LOG_KEY_USER_ID, userId)
+        .addKeyValue(LOG_KEY_TASK_ID, taskId)
         .log("Task deleted");
   }
 
@@ -159,12 +164,10 @@ public class TaskService {
   }
 
   private User getUser(UUID userId) {
-
     return userRepository.findById(userId).orElseThrow(UserIsNotExistException::new);
   }
 
   private TaskDto mapToDto(Task task) {
-
     return TaskDto.builder()
         .id(task.getTaskId())
         .title(task.getTitle())

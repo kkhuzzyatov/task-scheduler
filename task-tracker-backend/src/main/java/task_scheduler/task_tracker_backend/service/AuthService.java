@@ -21,20 +21,24 @@ import task_scheduler.task_tracker_backend.user.UserRepository;
 @Service
 public class AuthService {
 
+  private static final String LOG_KEY_SERVICE = "service";
+  private static final String LOG_KEY_EVENT = "event";
+  private static final String LOG_KEY_EMAIL = "email";
+  private static final String LOG_KEY_USER_ID = "userId";
+
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtProvider jwtProvider;
   private final EmailProducer emailProducer;
-
   private final LogProperties logProperties;
 
   public void register(String email, String password) {
     if (userRepository.existsByEmail(email)) {
       log.atWarn()
-          .addKeyValue("service", logProperties.name())
-          .addKeyValue("event", "user_registration_failed")
+          .addKeyValue(LOG_KEY_SERVICE, logProperties.name())
+          .addKeyValue(LOG_KEY_EVENT, "user_registration_failed")
           .addKeyValue("reason", "email_exists")
-          .addKeyValue("email", email)
+          .addKeyValue(LOG_KEY_EMAIL, email)
           .log("Email already exists");
 
       throw new UserAlreadyExistsException("Email уже зарегистрирован");
@@ -47,10 +51,10 @@ public class AuthService {
     user = userRepository.save(user);
 
     log.atInfo()
-        .addKeyValue("service", logProperties.name())
-        .addKeyValue("event", "user_registered")
-        .addKeyValue("userId", user.getUserId())
-        .addKeyValue("email", user.getEmail())
+        .addKeyValue(LOG_KEY_SERVICE, logProperties.name())
+        .addKeyValue(LOG_KEY_EVENT, "user_registered")
+        .addKeyValue(LOG_KEY_USER_ID, user.getUserId())
+        .addKeyValue(LOG_KEY_EMAIL, user.getEmail())
         .log("User registered successfully");
 
     emailProducer.send(
@@ -69,10 +73,10 @@ public class AuthService {
             .orElseThrow(
                 () -> {
                   log.atWarn()
-                      .addKeyValue("service", logProperties.name())
-                      .addKeyValue("event", "login_failed")
+                      .addKeyValue(LOG_KEY_SERVICE, logProperties.name())
+                      .addKeyValue(LOG_KEY_EVENT, "login_failed")
                       .addKeyValue("reason", "user_not_found")
-                      .addKeyValue("email", email)
+                      .addKeyValue(LOG_KEY_EMAIL, email)
                       .log("Login failed: user not found");
 
                   return new IllegalArgumentException("Неверный email или пароль");
@@ -80,11 +84,11 @@ public class AuthService {
 
     if (!passwordEncoder.matches(password, user.getPasswordHash())) {
       log.atWarn()
-          .addKeyValue("service", logProperties.name())
-          .addKeyValue("event", "login_failed")
+          .addKeyValue(LOG_KEY_SERVICE, logProperties.name())
+          .addKeyValue(LOG_KEY_EVENT, "login_failed")
           .addKeyValue("reason", "invalid_password")
-          .addKeyValue("userId", user.getUserId())
-          .addKeyValue("email", email)
+          .addKeyValue(LOG_KEY_USER_ID, user.getUserId())
+          .addKeyValue(LOG_KEY_EMAIL, email)
           .log("Login failed: invalid password");
 
       throw new IllegalArgumentException("Неверный email или пароль");
@@ -93,33 +97,33 @@ public class AuthService {
     String token = jwtProvider.generate(user.getUserId(), user.getEmail());
 
     log.atInfo()
-        .addKeyValue("service", logProperties.name())
-        .addKeyValue("event", "login_success")
-        .addKeyValue("userId", user.getUserId())
-        .addKeyValue("email", user.getEmail())
+        .addKeyValue(LOG_KEY_SERVICE, logProperties.name())
+        .addKeyValue(LOG_KEY_EVENT, "login_success")
+        .addKeyValue(LOG_KEY_USER_ID, user.getUserId())
+        .addKeyValue(LOG_KEY_EMAIL, user.getEmail())
         .log("User logged in successfully");
 
     return new LoginResult(token);
   }
 
   public UUID getMyUuid(String token) {
-    token = token.trim();
+    String normalizedToken = token.trim();
 
-    if (token.startsWith("Bearer ")) {
-      token = token.substring(7);
+    if (normalizedToken.startsWith("Bearer ")) {
+      normalizedToken = normalizedToken.substring(7);
     }
 
-    if (token.startsWith("\"") && token.endsWith("\"")) {
-      token = token.substring(1, token.length() - 1);
+    if (normalizedToken.startsWith("\"") && normalizedToken.endsWith("\"")) {
+      normalizedToken = normalizedToken.substring(1, normalizedToken.length() - 1);
     }
 
-    Claims claims = jwtProvider.validate(token);
+    Claims claims = jwtProvider.validate(normalizedToken);
     UUID userId = UUID.fromString(claims.getSubject());
 
     log.atDebug()
-        .addKeyValue("service", logProperties.name())
-        .addKeyValue("event", "jwt_validated")
-        .addKeyValue("userId", userId)
+        .addKeyValue(LOG_KEY_SERVICE, logProperties.name())
+        .addKeyValue(LOG_KEY_EVENT, "jwt_validated")
+        .addKeyValue(LOG_KEY_USER_ID, userId)
         .log("JWT validated successfully");
 
     return userId;
@@ -131,9 +135,9 @@ public class AuthService {
         .orElseThrow(
             () -> {
               log.atWarn()
-                  .addKeyValue("service", logProperties.name())
-                  .addKeyValue("event", "user_lookup_failed")
-                  .addKeyValue("userId", id)
+                  .addKeyValue(LOG_KEY_SERVICE, logProperties.name())
+                  .addKeyValue(LOG_KEY_EVENT, "user_lookup_failed")
+                  .addKeyValue(LOG_KEY_USER_ID, id)
                   .log("User not found");
 
               return new UserIsNotExistException();

@@ -13,6 +13,10 @@ import task_scheduler.task_tracker_summarization_server.properties.OpenAiPropert
 @RequiredArgsConstructor
 public class OpenAiApiClient {
 
+  private static final String LOG_KEY_SERVICE = "service";
+  private static final String LOG_KEY_EVENT = "event";
+  private static final String LOG_KEY_USER_ID = "userId";
+
   private final RestClient restClient;
   private final OpenAiProperties properties;
   private final LogProperties logProperties;
@@ -22,10 +26,10 @@ public class OpenAiApiClient {
     long start = System.currentTimeMillis();
 
     log.atDebug()
-        .addKeyValue("service", logProperties.name())
-        .addKeyValue("event", "openai_request_started")
+        .addKeyValue(LOG_KEY_SERVICE, logProperties.name())
+        .addKeyValue(LOG_KEY_EVENT, "openai_request_started")
         .addKeyValue("model", properties.model())
-        .addKeyValue("userId", userId)
+        .addKeyValue(LOG_KEY_USER_ID, userId)
         .log("OpenAI request started");
 
     try {
@@ -52,9 +56,9 @@ public class OpenAiApiClient {
       long duration = System.currentTimeMillis() - start;
 
       log.atInfo()
-          .addKeyValue("service", logProperties.name())
-          .addKeyValue("event", "report_summary_generated")
-          .addKeyValue("userId", userId)
+          .addKeyValue(LOG_KEY_SERVICE, logProperties.name())
+          .addKeyValue(LOG_KEY_EVENT, "report_summary_generated")
+          .addKeyValue(LOG_KEY_USER_ID, userId)
           .addKeyValue("durationMs", duration)
           .log("OpenAI response received");
 
@@ -64,9 +68,9 @@ public class OpenAiApiClient {
 
       log.atError()
           .setCause(e)
-          .addKeyValue("service", logProperties.name())
-          .addKeyValue("event", "openai_request_failed")
-          .addKeyValue("userId", userId)
+          .addKeyValue(LOG_KEY_SERVICE, logProperties.name())
+          .addKeyValue(LOG_KEY_EVENT, "openai_request_failed")
+          .addKeyValue(LOG_KEY_USER_ID, userId)
           .addKeyValue("statusCode", e.getStatusCode().value())
           .addKeyValue("exception", e.getClass().getSimpleName())
           .log("OpenAI request failed");
@@ -77,9 +81,9 @@ public class OpenAiApiClient {
 
       log.atError()
           .setCause(e)
-          .addKeyValue("service", logProperties.name())
-          .addKeyValue("event", "openai_request_failed")
-          .addKeyValue("userId", userId)
+          .addKeyValue(LOG_KEY_SERVICE, logProperties.name())
+          .addKeyValue(LOG_KEY_EVENT, "openai_request_failed")
+          .addKeyValue(LOG_KEY_USER_ID, userId)
           .addKeyValue("exception", e.getClass().getSimpleName())
           .log("OpenAI request failed");
 
