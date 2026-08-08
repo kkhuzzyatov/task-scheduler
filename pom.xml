@@ -148,7 +148,7 @@
                     <version>${pmd-maven-plugin.version}</version>
                     <configuration>
                         <rulesets>
-                            <ruleset>${project.basedir}/pmd-ruleset.xml</ruleset>
+                            <ruleset>pmd-ruleset.xml</ruleset>
                         </rulesets>
                         <failOnViolation>true</failOnViolation>
                         <printFailingErrors>true</printFailingErrors>
