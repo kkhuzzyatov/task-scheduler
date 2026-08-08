@@ -39,14 +39,11 @@ public class Task {
   @Column(name = "deleted_at")
   private LocalDateTime deletedAt;
 
-  public boolean isCompleted() {
-    return completedAt != null;
-  }
-
   public void complete() {
     this.completedAt = LocalDateTime.now();
   }
 
+  @SuppressWarnings("PMD.NullAssignment")
   public void uncomplete() {
     this.completedAt = null;
   }
