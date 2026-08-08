@@ -163,29 +163,6 @@ services:
 
 
   # =========================
-  # Container metrics
-  # =========================
-
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.51.0
-
-    ports:
-      - "8085:8080"
-
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk/:/dev/disk:ro
-
-    privileged: true
-
-    restart:
-      unless-stopped
-
-
-  # =========================
   # Logs
   # =========================
 
@@ -204,25 +181,6 @@ services:
 
     restart:
       unless-stopped
-
-
-  promtail:
-    image: grafana/promtail:3.3.2
-
-    volumes:
-      - ./monitoring/promtail/promtail-config.yml:/etc/promtail/config.yml
-      - /var/log:/var/log
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-
-    command:
-      - "-config.file=/etc/promtail/config.yml"
-
-    depends_on:
-      - loki
-
-    restart:
-      unless-stopped
-
 
 volumes:
   postgres_data:
