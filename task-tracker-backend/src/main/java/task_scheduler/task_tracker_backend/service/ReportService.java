@@ -33,12 +33,12 @@ public class ReportService {
                         .findAllByUserUserIdAndCompletedAtBetweenAndDeletedAtIsNull(
                             user.getUserId(), from, to)
                         .stream()
-                        .map(this::mapToDto)
+                        .map(task -> mapToDto(task))
                         .toList(),
                     taskRepository
                         .findAllByUserUserIdAndCompletedAtIsNullAndDeletedAtIsNull(user.getUserId())
                         .stream()
-                        .map(this::mapToDto)
+                        .map(task -> mapToDto(task))
                         .toList()))
         .toList();
   }
