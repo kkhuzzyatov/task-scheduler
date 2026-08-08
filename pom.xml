@@ -148,8 +148,7 @@
                     <version>${pmd-maven-plugin.version}</version>
                     <configuration>
                         <rulesets>
-                            <ruleset>category/java/errorprone.xml</ruleset>
-                            <ruleset>category/java/bestpractices.xml</ruleset>
+                            <ruleset>${project.basedir}/pmd-ruleset.xml</ruleset>
                         </rulesets>
                         <failOnViolation>true</failOnViolation>
                         <printFailingErrors>true</printFailingErrors>
