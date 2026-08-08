@@ -1,0 +1,42 @@
+name: Static Analysis
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 15
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+
+      - name: Run Spotless check
+        run: mvn spotless:check
+
+
+      - name: Run SpotBugs check
+        run: mvn spotbugs:check
+
+
+      - name: Run PMD check
+        run: mvn pmd:check
