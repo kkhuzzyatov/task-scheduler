@@ -7,16 +7,18 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.UUID;
 import javax.crypto.SecretKey;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import task_scheduler.task_tracker_backend.properties.JwtProperties;
 
 @Component
+@RequiredArgsConstructor
 public class JwtProvider {
 
-  private final SecretKey key;
+  private final JwtProperties jwtProperties;
 
-  public JwtProvider(@Value("${app.jwt.secret}") String secret) {
-    this.key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(secret));
+  private SecretKey key() {
+    return Keys.hmacShaKeyFor(Base64.getDecoder().decode(jwtProperties.getSecret()));
   }
 
   public String generate(UUID userId, String email) {
@@ -26,11 +28,11 @@ public class JwtProvider {
         .claim("role", "USER")
         .issuedAt(new Date())
         .expiration(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000L))
-        .signWith(key)
+        .signWith(key())
         .compact();
   }
 
   public Claims validate(String token) {
-    return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
+    return Jwts.parser().verifyWith(key()).build().parseSignedClaims(token).getPayload();
   }
 }
