@@ -1,5 +1,6 @@
 services:
   task-tracker-backend:
+    image: khuzzyatov/task-tracker-backend:latest
     build:
       context: ./task-tracker-backend
       dockerfile: Dockerfile
@@ -20,6 +21,7 @@ services:
 
 
   task-tracker-email-sender:
+    image: khuzzyatov/task-tracker-email-sender:latest
     build:
       context: ./task-tracker-email-sender
       dockerfile: Dockerfile
@@ -33,6 +35,7 @@ services:
 
 
   task-tracker-summarization-server:
+    image: khuzzyatov/task-tracker-summarization-server:latest
     build:
       context: ./task-tracker-summarization-server
       dockerfile: Dockerfile
@@ -49,6 +52,7 @@ services:
 
 
   task-tracker-scheduler:
+    image: khuzzyatov/task-tracker-scheduler:latest
     build:
       context: ./task-tracker-scheduler
       dockerfile: Dockerfile
@@ -65,7 +69,7 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_DB: backend_db
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
