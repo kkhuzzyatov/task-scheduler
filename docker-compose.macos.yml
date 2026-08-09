@@ -1,6 +1,5 @@
 services:
   task-tracker-backend:
-    image: khuzzyatov/task-tracker-backend:latest
     build:
       context: ./task-tracker-backend
       dockerfile: Dockerfile
@@ -13,7 +12,7 @@ services:
       - "8080:8080"
     environment:
       INTERNAL_API_KEY: ${INTERNAL_API_KEY}
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/backend_db
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       APP_JWT_SECRET: ${JWT_SECRET}
@@ -21,7 +20,6 @@ services:
 
 
   task-tracker-email-sender:
-    image: khuzzyatov/task-tracker-email-sender:latest
     build:
       context: ./task-tracker-email-sender
       dockerfile: Dockerfile
@@ -35,7 +33,6 @@ services:
 
 
   task-tracker-summarization-server:
-    image: khuzzyatov/task-tracker-summarization-server:latest
     build:
       context: ./task-tracker-summarization-server
       dockerfile: Dockerfile
@@ -52,7 +49,6 @@ services:
 
 
   task-tracker-scheduler:
-    image: khuzzyatov/task-tracker-scheduler:latest
     build:
       context: ./task-tracker-scheduler
       dockerfile: Dockerfile
