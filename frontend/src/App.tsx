@@ -7,39 +7,14 @@ import {
 
 import LoginPage from "./pages/login/LoginPage";
 import RegisterPage from "./pages/register/RegisterPage";
+import TasksPage from "./pages/tasks/TasksPage";
+import NotFound from "./pages/not-found/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
-
-
-function PublicRoute({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const token = localStorage.getItem("token");
-
-  if (token) {
-    return (
-      <Navigate
-        to="/tasks"
-        replace
-      />
-    );
-  }
-
-  return children;
-}
-
-
-function TasksPage() {
-  return <h1>Tasks page</h1>;
-}
-
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-
         <Route
           path="/"
           element={
@@ -52,20 +27,12 @@ export default function App() {
 
         <Route
           path="/login"
-          element={
-            <PublicRoute>
-              <LoginPage />
-            </PublicRoute>
-          }
+          element={<LoginPage />}
         />
 
         <Route
           path="/register"
-          element={
-            <PublicRoute>
-              <RegisterPage />
-            </PublicRoute>
-          }
+          element={<RegisterPage />}
         />
 
         <Route
@@ -79,14 +46,8 @@ export default function App() {
 
         <Route
           path="*"
-          element={
-            <Navigate
-              to="/login"
-              replace
-            />
-          }
+          element={<NotFound />}
         />
-
       </Routes>
     </BrowserRouter>
   );

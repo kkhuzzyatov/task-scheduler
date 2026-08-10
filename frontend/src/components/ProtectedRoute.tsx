@@ -9,16 +9,17 @@ interface Props {
 export default function ProtectedRoute({
   children,
 }: Props) {
-  const [loading, setLoading] = useState(true);
-  const [authorized, setAuthorized] = useState(false);
+  const [authorized, setAuthorized] =
+    useState<boolean | null>(null);
+
 
   useEffect(() => {
     async function checkAuth() {
-      const token = localStorage.getItem("token");
+      const token =
+        localStorage.getItem("token");
 
       if (!token) {
         setAuthorized(false);
-        setLoading(false);
         return;
       }
 
@@ -26,20 +27,21 @@ export default function ProtectedRoute({
         await getCurrentUser(token);
 
         setAuthorized(true);
+
       } catch {
         localStorage.removeItem("token");
         setAuthorized(false);
-      } finally {
-        setLoading(false);
       }
     }
 
     checkAuth();
   }, []);
 
-  if (loading) {
+
+  if (authorized === null) {
     return <div>Loading...</div>;
   }
+
 
   if (!authorized) {
     return (
@@ -49,6 +51,7 @@ export default function ProtectedRoute({
       />
     );
   }
+
 
   return children;
 }
