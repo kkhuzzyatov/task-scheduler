@@ -1,5 +1,7 @@
 services:
   task-tracker-backend:
+    platform: linux/amd64
+    image: khuzzyatov/task-tracker-backend:latest
     build:
       context: ./task-tracker-backend
       dockerfile: Dockerfile
@@ -20,6 +22,8 @@ services:
 
 
   task-tracker-email-sender:
+    platform: linux/amd64
+    image: khuzzyatov/task-tracker-email-sender:latest
     build:
       context: ./task-tracker-email-sender
       dockerfile: Dockerfile
@@ -33,6 +37,8 @@ services:
 
 
   task-tracker-summarization-server:
+    platform: linux/amd64
+    image: khuzzyatov/task-tracker-summarization-server:latest
     build:
       context: ./task-tracker-summarization-server
       dockerfile: Dockerfile
@@ -49,6 +55,8 @@ services:
 
 
   task-tracker-scheduler:
+    platform: linux/amd64
+    image: khuzzyatov/task-tracker-scheduler:latest
     build:
       context: ./task-tracker-scheduler
       dockerfile: Dockerfile
