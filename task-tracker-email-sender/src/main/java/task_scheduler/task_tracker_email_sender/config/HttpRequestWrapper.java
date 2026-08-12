@@ -1,14 +1,16 @@
 package task_scheduler.task_tracker_email_sender.config;
 
 import java.net.URI;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpRequest;
 
 @AllArgsConstructor
 @Builder
-public abstract class HttpRequestWrapper implements HttpRequest {
+public class HttpRequestWrapper implements HttpRequest {
 
   private final HttpRequest request;
   private final URI uri;
@@ -19,12 +21,17 @@ public abstract class HttpRequestWrapper implements HttpRequest {
   }
 
   @Override
-  public org.springframework.http.HttpMethod getMethod() {
+  public HttpMethod getMethod() {
     return request.getMethod();
   }
 
   @Override
   public HttpHeaders getHeaders() {
     return request.getHeaders();
+  }
+
+  @Override
+  public Map<String, Object> getAttributes() {
+    return request.getAttributes();
   }
 }
