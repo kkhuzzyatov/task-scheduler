@@ -19,4 +19,8 @@ export const API_ENDPOINTS = {
     byId: (id: string) =>
       `/api/task/${id}`,
   },
+
+  report: {
+    generate: "/api/report/generate",
+  },
 };
