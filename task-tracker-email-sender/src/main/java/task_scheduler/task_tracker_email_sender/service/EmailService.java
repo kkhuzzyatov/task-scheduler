@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import task_scheduler.task_tracker_email_sender.client.UnisenderClient;
 import task_scheduler.task_tracker_email_sender.dto.ReportResponse;
-import task_scheduler.task_tracker_email_sender.dto.WelcomeMessage;
 
 @Service
 @RequiredArgsConstructor
@@ -19,10 +18,10 @@ public class EmailService {
     send(response.userEmail(), "Daily report", response.summary());
   }
 
-  public void sendWelcomeMessage(WelcomeMessage welcomeMessage) {
+  public void sendWelcomeMessage(String email) {
 
     send(
-        welcomeMessage.email(),
+        email,
         "Welcome message",
         "Thanks for sign up in task tracker. Hope you'll like our product");
   }
