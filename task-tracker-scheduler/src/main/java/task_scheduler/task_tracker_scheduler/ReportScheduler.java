@@ -17,7 +17,7 @@ public class ReportScheduler {
   private final ReportGenerationService reportGenerationService;
   private final LogProperties logProperties;
 
-  @Scheduled(fixedDelay = 5_000)
+  @Scheduled(cron = "0 0 * * * *")
   public void sendReport() {
 
     String executionId = UUID.randomUUID().toString();
