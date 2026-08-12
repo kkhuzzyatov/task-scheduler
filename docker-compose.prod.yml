@@ -27,6 +27,7 @@ services:
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       UNISENDER_API_KEY: ${UNISENDER_API_KEY}
+      APP_URL: ${APP_URL}
 
 
   task-tracker-summarization-service:

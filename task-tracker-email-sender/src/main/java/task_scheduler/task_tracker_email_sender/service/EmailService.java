@@ -12,22 +12,19 @@ import task_scheduler.task_tracker_email_sender.dto.ReportResponse;
 public class EmailService {
 
   private final UnisenderClient unisenderClient;
+  private final EmailTemplateService emailTemplateService;
 
   public void sendReportEmail(ReportResponse response) {
 
-    send(response.userEmail(), "Daily report", response.summary());
+    String html = emailTemplateService.createReportEmail(response.summary());
+
+    unisenderClient.sendEmail(response.userEmail(), "Daily report", html);
   }
 
   public void sendWelcomeMessage(String email) {
 
-    send(
-        email,
-        "Welcome message",
-        "Thanks for sign up in task tracker. Hope you'll like our product");
-  }
+    String html = emailTemplateService.createWelcomeEmail();
 
-  private void send(String email, String subject, String body) {
-
-    unisenderClient.sendEmail(email, subject, body);
+    unisenderClient.sendEmail(email, "Welcome message", html);
   }
 }
