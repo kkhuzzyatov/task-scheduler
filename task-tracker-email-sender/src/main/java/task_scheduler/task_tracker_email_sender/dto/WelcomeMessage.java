@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class EmailTask {
+public class WelcomeMessage {
 
   private String recipient;
   private String subject;

@@ -3,7 +3,7 @@ package task_scheduler.task_tracker_email_sender.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import task_scheduler.task_tracker_email_sender.dto.EmailTask;
+import task_scheduler.task_tracker_email_sender.dto.WelcomeMessage;
 import task_scheduler.task_tracker_email_sender.dto.ReportResponse;
 import task_scheduler.task_tracker_email_sender.properties.LogProperties;
 import task_scheduler.task_tracker_email_sender.storage.TemporaryConsumedMessagesStorage;
@@ -21,7 +21,7 @@ public class EmailService {
     send(response.userEmail(), "Daily report", response.summary(), response.userEmail());
   }
 
-  public void sendEmail(EmailTask task) {
+  public void sendEmail(WelcomeMessage task) {
 
     send(task.getRecipient(), task.getSubject(), task.getText(), task.getRecipient());
   }
