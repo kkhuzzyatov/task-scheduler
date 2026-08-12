@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import task_scheduler.task_tracker_scheduler.client.BackendClient;
-import task_scheduler.task_tracker_scheduler.dto.DailyReportData;
+import task_scheduler.task_tracker_scheduler.dto.ReportData;
 import task_scheduler.task_tracker_scheduler.kafka.ReportRequestProducer;
 import task_scheduler.task_tracker_scheduler.mapper.ReportRequestMapper;
 import task_scheduler.task_tracker_scheduler.properties.InternalApiProperties;
@@ -25,7 +25,7 @@ public class ReportGenerationService {
 
   public void generateReports(String executionId) {
 
-    List<DailyReportData> reports = backendClient.getDailyReports(internalApiProperties.apiKey());
+    List<ReportData> reports = backendClient.getReports(internalApiProperties.apiKey());
 
     log.atInfo()
         .addKeyValue("service", logProperties.name())
@@ -47,7 +47,7 @@ public class ReportGenerationService {
         .forEach(reportRequestProducer::send);
   }
 
-  private boolean hasTasks(DailyReportData report) {
+  private boolean hasTasks(ReportData report) {
 
     return !report.completedTasks().isEmpty() || !report.uncompletedTasks().isEmpty();
   }

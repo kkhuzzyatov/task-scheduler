@@ -3,7 +3,7 @@ package task_scheduler.task_tracker_scheduler.mapper;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import task_scheduler.task_tracker_scheduler.dto.DailyReportData;
+import task_scheduler.task_tracker_scheduler.dto.ReportData;
 import task_scheduler.task_tracker_scheduler.dto.ReportRequest;
 import task_scheduler.task_tracker_scheduler.dto.TaskDto;
 import task_scheduler.task_tracker_scheduler.properties.LogProperties;
@@ -18,7 +18,7 @@ public class ReportRequestMapper {
     this.logProperties = logProperties;
   }
 
-  public ReportRequest toReportRequest(DailyReportData data) {
+  public ReportRequest toReportRequest(ReportData data) {
 
     ReportRequest request =
         ReportRequest.builder()

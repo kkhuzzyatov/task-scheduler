@@ -27,9 +27,9 @@ public class ReportScheduler {
 
       log.atInfo()
           .addKeyValue("service", logProperties.name())
-          .addKeyValue("event", "daily_report_generation_started")
+          .addKeyValue("event", "_report_generation_started")
           .addKeyValue("executionId", executionId)
-          .log("Daily report job started");
+          .log(" report job started");
 
       reportGenerationService.generateReports(executionId);
 
@@ -38,9 +38,9 @@ public class ReportScheduler {
       log.atError()
           .setCause(e)
           .addKeyValue("service", logProperties.name())
-          .addKeyValue("event", "daily_report_generation_failed")
+          .addKeyValue("event", "_report_generation_failed")
           .addKeyValue("executionId", executionId)
-          .log("Daily report generation failed");
+          .log(" report generation failed");
 
     } finally {
       MDC.remove("correlationId");

@@ -18,7 +18,7 @@ public class EmailService {
 
     String html = emailTemplateService.createReportEmail(response.summary());
 
-    unisenderClient.sendEmail(response.userEmail(), "Daily report", html);
+    unisenderClient.sendEmail(response.userEmail(), " report", html);
   }
 
   public void sendWelcomeMessage(String email) {

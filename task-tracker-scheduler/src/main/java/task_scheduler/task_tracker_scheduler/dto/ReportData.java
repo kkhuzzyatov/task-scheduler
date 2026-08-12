@@ -1,12 +1,10 @@
-package task_scheduler.task_tracker_backend.dto.report;
+package task_scheduler.task_tracker_scheduler.dto;
 
 import java.util.List;
-import task_scheduler.task_tracker_backend.dto.task.TaskDto;
 
-public record DailyReportData(
+public record ReportData(
     String userEmail, List<TaskDto> completedTasks, List<TaskDto> uncompletedTasks) {
-
-  public DailyReportData {
+  public ReportData {
     completedTasks = List.copyOf(completedTasks);
     uncompletedTasks = List.copyOf(uncompletedTasks);
   }

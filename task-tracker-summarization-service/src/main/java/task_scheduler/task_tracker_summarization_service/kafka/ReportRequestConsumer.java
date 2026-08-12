@@ -49,7 +49,7 @@ public class ReportRequestConsumer {
 
     String prompt =
         """
-        You are the assistant responsible for creating the daily user task report.
+        You are the assistant responsible for creating the  user task report.
 
         User: %s
 

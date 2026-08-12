@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import task_scheduler.task_tracker_backend.dto.report.DailyReportData;
+import task_scheduler.task_tracker_backend.dto.report.ReportData;
 import task_scheduler.task_tracker_backend.dto.task.TaskDto;
 import task_scheduler.task_tracker_backend.task.Task;
 import task_scheduler.task_tracker_backend.task.TaskRepository;
@@ -19,7 +19,7 @@ public class ReportService {
   private final TaskRepository taskRepository;
 
   @Transactional(readOnly = true)
-  public List<DailyReportData> getDailyReports() {
+  public List<ReportData> getReports() {
 
     LocalDateTime from = LocalDateTime.now().minusDays(1);
     LocalDateTime to = LocalDateTime.now();
@@ -27,7 +27,7 @@ public class ReportService {
     return userRepository.findAll().stream()
         .map(
             user ->
-                new DailyReportData(
+                new ReportData(
                     user.getEmail(),
                     taskRepository
                         .findAllByUserUserIdAndCompletedAtBetweenAndDeletedAtIsNull(
