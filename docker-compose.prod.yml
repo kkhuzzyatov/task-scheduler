@@ -55,6 +55,19 @@ services:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
 
 
+  frontend:
+    image: khuzzyatov/task_tracker_frontend:${IMAGE_TAG}
+
+    depends_on:
+      - task-tracker-backend
+      - task-tracker-email-sender
+      - task-tracker-summarization-server
+      - task-tracker-scheduler
+
+    ports:
+      - "5173:80"
+
+
   postgres:
     image: postgres:16-alpine
     environment:

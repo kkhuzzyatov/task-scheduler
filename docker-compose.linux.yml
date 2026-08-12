@@ -1,7 +1,7 @@
 services:
   task-tracker-backend:
     platform: linux/amd64
-    image: khuzzyatov/task-tracker-backend:latest
+    image: khuzzyatov/task-tracker-backend:${IMAGE_TAG}
     build:
       context: ./task-tracker-backend
       dockerfile: Dockerfile
@@ -23,7 +23,7 @@ services:
 
   task-tracker-email-sender:
     platform: linux/amd64
-    image: khuzzyatov/task-tracker-email-sender:latest
+    image: khuzzyatov/task-tracker-email-sender:${IMAGE_TAG}
     build:
       context: ./task-tracker-email-sender
       dockerfile: Dockerfile
@@ -39,7 +39,7 @@ services:
 
   task-tracker-summarization-server:
     platform: linux/amd64
-    image: khuzzyatov/task-tracker-summarization-server:latest
+    image: khuzzyatov/task-tracker-summarization-server:${IMAGE_TAG}
     build:
       context: ./task-tracker-summarization-server
       dockerfile: Dockerfile
@@ -57,7 +57,7 @@ services:
 
   task-tracker-scheduler:
     platform: linux/amd64
-    image: khuzzyatov/task-tracker-scheduler:latest
+    image: khuzzyatov/task-tracker-scheduler:${IMAGE_TAG}
     build:
       context: ./task-tracker-scheduler
       dockerfile: Dockerfile
@@ -69,6 +69,23 @@ services:
     environment:
       INTERNAL_API_KEY: ${INTERNAL_API_KEY}
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+
+  frontend:
+    platform: linux/amd64
+    image: khuzzyatov/task_tracker_frontend:${IMAGE_TAG}
+    build:
+      context: ./fronend
+      dockerfile: Dockerfile
+
+    depends_on:
+      - task-tracker-backend
+      - task-tracker-email-sender
+      - task-tracker-summarization-server
+      - task-tracker-scheduler
+
+    ports:
+      - "5173:80"
 
 
   postgres:
