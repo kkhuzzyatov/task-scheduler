@@ -1,4 +1,4 @@
-package task_scheduler.task_tracker_summarization_server.dto;
+package task_scheduler.task_tracker_summarization_service.dto;
 
 import lombok.Builder;
 

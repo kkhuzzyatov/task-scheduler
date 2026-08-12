@@ -37,11 +37,11 @@ services:
       UNISENDER_API_KEY: ${UNISENDER_API_KEY}
 
 
-  task-tracker-summarization-server:
+  task-tracker-summarization-service:
     platform: linux/amd64
-    image: khuzzyatov/task-tracker-summarization-server:${IMAGE_TAG}
+    image: khuzzyatov/task-tracker-summarization-service:${IMAGE_TAG}
     build:
-      context: ./task-tracker-summarization-server
+      context: ./task-tracker-summarization-service
       dockerfile: Dockerfile
     depends_on:
       kafka:
@@ -81,7 +81,7 @@ services:
     depends_on:
       - task-tracker-backend
       - task-tracker-email-sender
-      - task-tracker-summarization-server
+      - task-tracker-summarization-service
       - task-tracker-scheduler
 
     ports:

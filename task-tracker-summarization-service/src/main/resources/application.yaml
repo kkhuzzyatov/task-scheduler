@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: task-tracker-summarization-server
+    name: task-tracker-summarization-service
 
 kafka:
   bootstrap-servers: kafka:9092

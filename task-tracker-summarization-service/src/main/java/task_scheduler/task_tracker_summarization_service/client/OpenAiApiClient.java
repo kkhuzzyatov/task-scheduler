@@ -1,4 +1,4 @@
-package task_scheduler.task_tracker_summarization_server.client;
+package task_scheduler.task_tracker_summarization_service.client;
 
 import java.util.List;
 import java.util.Map;
@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClient;
-import task_scheduler.task_tracker_summarization_server.properties.LogProperties;
-import task_scheduler.task_tracker_summarization_server.properties.OpenAiProperties;
+import task_scheduler.task_tracker_summarization_service.properties.LogProperties;
+import task_scheduler.task_tracker_summarization_service.properties.OpenAiProperties;
 
 @Slf4j
 @RequiredArgsConstructor

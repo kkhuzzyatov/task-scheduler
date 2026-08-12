@@ -1,4 +1,4 @@
-package task_scheduler.task_tracker_summarization_server.config;
+package task_scheduler.task_tracker_summarization_service.config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,8 +11,8 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import task_scheduler.task_tracker_summarization_server.dto.ReportRequest;
-import task_scheduler.task_tracker_summarization_server.properties.KafkaProperties;
+import task_scheduler.task_tracker_summarization_service.dto.ReportRequest;
+import task_scheduler.task_tracker_summarization_service.properties.KafkaProperties;
 
 @Configuration
 @RequiredArgsConstructor

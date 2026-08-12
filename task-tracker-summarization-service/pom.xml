@@ -8,7 +8,7 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>task-tracker-summarization-server</artifactId>
+    <artifactId>task-tracker-summarization-service</artifactId>
 
     <dependencies>
 

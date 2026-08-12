@@ -25,7 +25,7 @@ scrape_configs:
     metrics_path: /actuator/prometheus
     static_configs:
       - targets:
-          - task-tracker-summarization-server:8082
+          - task-tracker-summarization-service:8082
 
   - job_name: cadvisor
     static_configs:

@@ -29,8 +29,8 @@ services:
       UNISENDER_API_KEY: ${UNISENDER_API_KEY}
 
 
-  task-tracker-summarization-server:
-    image: khuzzyatov/task-tracker-summarization-server:${IMAGE_TAG}
+  task-tracker-summarization-service:
+    image: khuzzyatov/task-tracker-summarization-service:${IMAGE_TAG}
     depends_on:
       kafka:
         condition: service_healthy
@@ -61,7 +61,7 @@ services:
     depends_on:
       - task-tracker-backend
       - task-tracker-email-sender
-      - task-tracker-summarization-server
+      - task-tracker-summarization-service
       - task-tracker-scheduler
 
     ports:

@@ -1,4 +1,4 @@
-package task_scheduler.task_tracker_summarization_server.config;
+package task_scheduler.task_tracker_summarization_service.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.util.backoff.FixedBackOff;
-import task_scheduler.task_tracker_summarization_server.properties.LogProperties;
+import task_scheduler.task_tracker_summarization_service.properties.LogProperties;
 
 @RequiredArgsConstructor
 @Slf4j

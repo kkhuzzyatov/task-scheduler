@@ -1,4 +1,4 @@
-package task_scheduler.task_tracker_summarization_server.config;
+package task_scheduler.task_tracker_summarization_service.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

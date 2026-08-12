@@ -1,4 +1,4 @@
-package task_scheduler.task_tracker_summarization_server.properties;
+package task_scheduler.task_tracker_summarization_service.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

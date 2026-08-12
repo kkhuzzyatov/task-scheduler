@@ -29,7 +29,7 @@ cleanup_docker_resources() {
   local services=(
     "task-tracker-backend"
     "task-tracker-email-sender"
-    "task-tracker-summarization-server"
+    "task-tracker-summarization-service"
     "task-tracker-scheduler"
   )
 
@@ -49,7 +49,7 @@ cleanup_docker_resources() {
 
 build_maven_project "task-tracker-backend"
 build_maven_project "task-tracker-email-sender"
-build_maven_project "task-tracker-summarization-server"
+build_maven_project "task-tracker-summarization-service"
 build_maven_project "task-tracker-scheduler"
 
 cleanup_docker_resources

@@ -1,4 +1,4 @@
-package task_scheduler.task_tracker_summarization_server;
+package task_scheduler.task_tracker_summarization_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

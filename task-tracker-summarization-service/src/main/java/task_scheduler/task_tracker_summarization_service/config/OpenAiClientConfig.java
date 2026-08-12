@@ -1,12 +1,12 @@
-package task_scheduler.task_tracker_summarization_server.config;
+package task_scheduler.task_tracker_summarization_service.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
-import task_scheduler.task_tracker_summarization_server.client.OpenAiApiClient;
-import task_scheduler.task_tracker_summarization_server.properties.LogProperties;
-import task_scheduler.task_tracker_summarization_server.properties.OpenAiProperties;
+import task_scheduler.task_tracker_summarization_service.client.OpenAiApiClient;
+import task_scheduler.task_tracker_summarization_service.properties.LogProperties;
+import task_scheduler.task_tracker_summarization_service.properties.OpenAiProperties;
 
 @RequiredArgsConstructor
 @Configuration

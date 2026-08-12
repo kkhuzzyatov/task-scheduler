@@ -1,4 +1,4 @@
-package task_scheduler.task_tracker_summarization_server.kafka;
+package task_scheduler.task_tracker_summarization_service.kafka;
 
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -6,10 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import task_scheduler.task_tracker_summarization_server.client.OpenAiApiClient;
-import task_scheduler.task_tracker_summarization_server.dto.ReportRequest;
-import task_scheduler.task_tracker_summarization_server.dto.ReportResponse;
-import task_scheduler.task_tracker_summarization_server.properties.LogProperties;
+import task_scheduler.task_tracker_summarization_service.client.OpenAiApiClient;
+import task_scheduler.task_tracker_summarization_service.dto.ReportRequest;
+import task_scheduler.task_tracker_summarization_service.dto.ReportResponse;
+import task_scheduler.task_tracker_summarization_service.properties.LogProperties;
 
 @Slf4j
 @Component
