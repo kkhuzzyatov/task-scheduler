@@ -1,4 +1,4 @@
-package task_scheduler.task_tracker_email_sender.dto;
+package task_scheduler.task_tracker_backend.dto.message;
 
 import lombok.Builder;
 

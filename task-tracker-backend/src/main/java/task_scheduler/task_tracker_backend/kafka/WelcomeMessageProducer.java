@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-import task_scheduler.task_tracker_backend.dto.email.WelcomeMessage;
+import task_scheduler.task_tracker_backend.dto.message.WelcomeMessage;
 import task_scheduler.task_tracker_backend.properties.LogProperties;
 import task_scheduler.task_tracker_backend.user.User;
 
@@ -17,9 +17,9 @@ public class WelcomeMessageProducer {
 
   private final LogProperties logProperties;
 
-  public void send(WelcomeMessage task, User user) {
+  public void send(WelcomeMessage welcomeMessage, User user) {
     String topicName = "welcome-message";
-    kafkaTemplate.send(topicName, task.recipient(), task);
+    kafkaTemplate.send(topicName, welcomeMessage.email(), null);
     log.atInfo()
         .addKeyValue("service", logProperties.name())
         .addKeyValue("event", "welcome_email_created")

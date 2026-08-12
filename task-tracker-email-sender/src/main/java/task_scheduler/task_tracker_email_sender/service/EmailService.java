@@ -18,23 +18,23 @@ public class EmailService {
 
   public void sendReportEmail(ReportResponse response) {
 
-    send(response.userEmail(), "Daily report", response.summary(), response.userEmail());
+    send(response.userEmail(), "Daily report", response.summary());
   }
 
-  public void sendEmail(WelcomeMessage task) {
+  public void sendWelcomeMessage(WelcomeMessage welcomeMessage) {
 
-    send(task.getRecipient(), task.getSubject(), task.getText(), task.getRecipient());
+    send(welcomeMessage.email(), "Welcome message", "Thanks for sign up in task tracker. Hope you'll like our product");
   }
 
-  private void send(String recipient, String subject, String text, String userId) {
+  private void send(String email, String subject, String body) {
 
     long start = System.currentTimeMillis();
 
     log.atInfo()
         .addKeyValue("service", logProperties.name())
         .addKeyValue("event", "email_sending_started")
-        .addKeyValue("userId", userId)
-        .addKeyValue("recipient", recipient)
+        .addKeyValue("email", email)
+        .addKeyValue("email subject", subject)
         .log("Email sending started");
 
     try {
@@ -43,15 +43,17 @@ public class EmailService {
        * Temporary implementation.
        * Replace this with real email provider call later.
        */
-      storage.addMessage(recipient + ": " + subject + " - " + text);
 
       long durationMs = System.currentTimeMillis() - start;
+
+      // TODO
 
       log.atInfo()
           .addKeyValue("service", logProperties.name())
           .addKeyValue("event", "email_sent")
-          .addKeyValue("recipient", recipient)
-          .addKeyValue("durationMs", durationMs)
+          .addKeyValue("email", email)
+              .addKeyValue("email subject", subject)
+              .addKeyValue("duration in ms", durationMs)
           .log("Email sent successfully");
 
     } catch (Exception e) {
@@ -60,7 +62,8 @@ public class EmailService {
           .setCause(e)
           .addKeyValue("service", logProperties.name())
           .addKeyValue("event", "email_sending_failed")
-          .addKeyValue("recipient", recipient)
+              .addKeyValue("email", email)
+              .addKeyValue("email subject", subject)
           .addKeyValue("exception", e.getClass().getSimpleName())
           .log("Email sending failed");
 

@@ -17,14 +17,14 @@ public class WelcomeMessageConsumer {
   private final LogProperties logProperties;
 
   @KafkaListener(topics = "welcome-message", containerFactory = "emailKafkaListenerContainerFactory")
-  public void consume(WelcomeMessage task) {
+  public void consume(WelcomeMessage welcomeMessage) {
 
     log.atInfo()
         .addKeyValue("service", logProperties.name())
-        .addKeyValue("event", "email_task_received")
-        .addKeyValue("recipient", task.getRecipient())
-        .log("Email task received from Kafka");
+        .addKeyValue("event", "welcome_message_received")
+        .addKeyValue("email", welcomeMessage.email())
+        .log("Welcome message received from Kafka");
 
-    emailService.sendEmail(task);
+    emailService.sendWelcomeMessage(welcomeMessage);
   }
 }

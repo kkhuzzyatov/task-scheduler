@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import task_scheduler.task_tracker_backend.dto.auth.LoginResult;
-import task_scheduler.task_tracker_backend.dto.email.WelcomeMessage;
+import task_scheduler.task_tracker_backend.dto.message.WelcomeMessage;
 import task_scheduler.task_tracker_backend.exception.UserAlreadyExistsException;
 import task_scheduler.task_tracker_backend.exception.UserIsNotExistException;
 import task_scheduler.task_tracker_backend.jwt.JwtProvider;
@@ -59,9 +59,7 @@ public class AuthService {
 
     welcomeMessageProducer.send(
         WelcomeMessage.builder()
-            .recipient(user.getEmail())
-            .subject("Welcome!")
-            .text("Спасибо за регистрацию!")
+            .email(user.getEmail())
             .build(),
         user);
   }
