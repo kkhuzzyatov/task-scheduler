@@ -49,24 +49,22 @@ public class ReportRequestConsumer {
 
     String prompt =
         """
-            Ты являешься помощником для создания ежедневного отчета по задачам пользователя.
+        You are the assistant responsible for creating the daily user task report.
 
-            Составь краткий и структурированный отчет на русском языке.
+        User: %s
 
-            Пользователь: %s
+        Completed tasks:
+        %s
 
-            Выполненные задачи:
-            %s
+        Outstanding tasks:
+        %s
 
-            Невыполненные задачи:
-            %s
-
-            Требования к отчету:
-            - кратко опиши достигнутый прогресс;
-            - перечисли основные выполненные задачи;
-            - укажи оставшиеся задачи;
-            - добавь небольшой итоговый комментарий.
-            """
+        Report requirements:
+        - Briefly describe the progress made;
+        - List the main completed tasks;
+        - Indicate the remaining tasks;
+        - Add a short summary comment.
+          """
             .formatted(request.getUserEmail(), completedTasks, incompleteTasks);
 
     String summary = openAiApiClient.generateSummary(prompt, request.getUserEmail());
