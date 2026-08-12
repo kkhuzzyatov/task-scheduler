@@ -1,4 +1,4 @@
-package task_scheduler.task_tracker_backend.dto.report;
+package task_scheduler.task_tracker_summarization_service.dto;
 
 import java.util.List;
 import lombok.Builder;
