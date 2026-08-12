@@ -24,3 +24,7 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+
+unisender:
+  baseUrl: https://api.unisender.com/ru/api
+  apiKey: ${unisender.apiKey}
