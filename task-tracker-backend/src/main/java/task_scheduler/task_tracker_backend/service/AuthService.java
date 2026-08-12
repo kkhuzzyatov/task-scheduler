@@ -57,11 +57,7 @@ public class AuthService {
         .addKeyValue(LOG_KEY_EMAIL, user.getEmail())
         .log("User registered successfully");
 
-    welcomeMessageProducer.send(
-        WelcomeMessage.builder()
-            .email(user.getEmail())
-            .build(),
-        user);
+    welcomeMessageProducer.send(WelcomeMessage.builder().email(user.getEmail()).build(), user);
   }
 
   public LoginResult login(String email, String password) {

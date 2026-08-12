@@ -11,8 +11,8 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import task_scheduler.task_tracker_email_sender.dto.WelcomeMessage;
 import task_scheduler.task_tracker_email_sender.dto.ReportResponse;
+import task_scheduler.task_tracker_email_sender.dto.WelcomeMessage;
 import task_scheduler.task_tracker_email_sender.properties.KafkaProperties;
 
 @RequiredArgsConstructor
@@ -37,7 +37,8 @@ public class KafkaConsumerConfig {
   @Bean
   public ConsumerFactory<String, WelcomeMessage> emailConsumerFactory() {
 
-    JsonDeserializer<WelcomeMessage> deserializer = new JsonDeserializer<>(WelcomeMessage.class, false);
+    JsonDeserializer<WelcomeMessage> deserializer =
+        new JsonDeserializer<>(WelcomeMessage.class, false);
 
     deserializer.addTrustedPackages("*");
 

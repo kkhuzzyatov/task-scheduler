@@ -3,8 +3,8 @@ package task_scheduler.task_tracker_email_sender.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import task_scheduler.task_tracker_email_sender.dto.WelcomeMessage;
 import task_scheduler.task_tracker_email_sender.dto.ReportResponse;
+import task_scheduler.task_tracker_email_sender.dto.WelcomeMessage;
 import task_scheduler.task_tracker_email_sender.properties.LogProperties;
 import task_scheduler.task_tracker_email_sender.storage.TemporaryConsumedMessagesStorage;
 
@@ -23,7 +23,10 @@ public class EmailService {
 
   public void sendWelcomeMessage(WelcomeMessage welcomeMessage) {
 
-    send(welcomeMessage.email(), "Welcome message", "Thanks for sign up in task tracker. Hope you'll like our product");
+    send(
+        welcomeMessage.email(),
+        "Welcome message",
+        "Thanks for sign up in task tracker. Hope you'll like our product");
   }
 
   private void send(String email, String subject, String body) {
@@ -52,8 +55,8 @@ public class EmailService {
           .addKeyValue("service", logProperties.name())
           .addKeyValue("event", "email_sent")
           .addKeyValue("email", email)
-              .addKeyValue("email subject", subject)
-              .addKeyValue("duration in ms", durationMs)
+          .addKeyValue("email subject", subject)
+          .addKeyValue("duration in ms", durationMs)
           .log("Email sent successfully");
 
     } catch (Exception e) {
@@ -62,8 +65,8 @@ public class EmailService {
           .setCause(e)
           .addKeyValue("service", logProperties.name())
           .addKeyValue("event", "email_sending_failed")
-              .addKeyValue("email", email)
-              .addKeyValue("email subject", subject)
+          .addKeyValue("email", email)
+          .addKeyValue("email subject", subject)
           .addKeyValue("exception", e.getClass().getSimpleName())
           .log("Email sending failed");
 

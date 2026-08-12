@@ -16,7 +16,9 @@ public class WelcomeMessageConsumer {
   private final EmailService emailService;
   private final LogProperties logProperties;
 
-  @KafkaListener(topics = "welcome-message", containerFactory = "emailKafkaListenerContainerFactory")
+  @KafkaListener(
+      topics = "welcome-message",
+      containerFactory = "emailKafkaListenerContainerFactory")
   public void consume(WelcomeMessage welcomeMessage) {
 
     log.atInfo()
