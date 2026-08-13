@@ -1,11 +1,12 @@
 package task_scheduler.task_tracker_backend.dto.report;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
-@Value
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TaskSummaryDto {
-  String title;
-  String description;
+  private String title;
+  private String description;
 }

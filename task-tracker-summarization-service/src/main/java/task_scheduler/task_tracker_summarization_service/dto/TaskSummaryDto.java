@@ -1,13 +1,12 @@
 package task_scheduler.task_tracker_summarization_service.dto;
 
-import lombok.Builder;
-import lombok.Value;
-import lombok.extern.jackson.Jacksonized;
+import lombok.*;
 
-@Jacksonized
-@Value
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TaskSummaryDto {
-  String title;
-  String description;
+  private String title;
+  private String description;
 }

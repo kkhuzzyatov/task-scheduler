@@ -1,18 +1,21 @@
 package task_scheduler.task_tracker_summarization_service.dto;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Value;
-import lombok.extern.jackson.Jacksonized;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Jacksonized
-@Value
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReportRequest {
-  String userEmail;
-  List<TaskSummaryDto> newTasksCreated;
-  List<TaskSummaryDto> newCompletedTasks;
-  List<TaskSummaryDto> newIncompleteTasks;
-  List<TaskSummaryDto> tasksCompletedInPreviousReport;
-  long timeSincePreviousReportSeconds;
+  private String userEmail;
+  private List<TaskSummaryDto> newTasksCreated;
+  private List<TaskSummaryDto> newCompletedTasks;
+  private List<TaskSummaryDto> newIncompleteTasks;
+  private List<TaskSummaryDto> tasksCompletedInPreviousReport;
+  private long timeSincePreviousReportSeconds;
+  private int totalPreviousReportNumber;
 }
