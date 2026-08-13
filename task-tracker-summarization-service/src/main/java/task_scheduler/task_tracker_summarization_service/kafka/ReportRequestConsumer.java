@@ -87,8 +87,12 @@ public class ReportRequestConsumer {
   }
 
   private String taskListToString(List<TaskSummaryDto> list) {
+    if (list == null || list.isEmpty()) {
+      return "No tasks";
+    }
+
     return list.stream()
-        .map(task -> "- %s: %s".formatted(task.getTitle(), task.getDescription()))
-        .collect(Collectors.joining("\n"));
+            .map(TaskSummaryDto::toString)
+            .collect(Collectors.joining("\n"));
   }
 }
