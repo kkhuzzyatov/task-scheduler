@@ -45,10 +45,7 @@ public class ReportController {
     UUID userId = authService.getMyUuid(token);
     User user = authService.getUserById(userId);
 
-    log.atInfo().log("From token email is " +  user.getEmail());
-
     ReportRequest reportRequest = reportService.createReport(user.getEmail());
-    log.atInfo().log("In created report request email is " +  reportRequest.getUserEmail());
     reportRequestProducer.send(reportRequest);
     return ResponseEntity.ok().build();
   }

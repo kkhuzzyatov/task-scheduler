@@ -21,7 +21,7 @@ public interface ReportRepository extends JpaRepository<Report, UUID> {
         AND t.createdAt > :since
       """)
   List<Task> findTasksCreatedSince(
-      @Param("userEmail") UUID userId, @Param("since") LocalDateTime since);
+      @Param("userId") UUID userId, @Param("since") LocalDateTime since);
 
   /*
    * Completed tasks of user completed since given report time
@@ -35,7 +35,7 @@ public interface ReportRepository extends JpaRepository<Report, UUID> {
         AND t.completedAt > :since
       """)
   List<Task> findCompletedTasksSince(
-      @Param("userEmail") UUID userId, @Param("since") LocalDateTime since);
+      @Param("userId") UUID userId, @Param("since") LocalDateTime since);
 
   /*
    * Incomplete tasks of user created since given report time
@@ -49,7 +49,7 @@ public interface ReportRepository extends JpaRepository<Report, UUID> {
         AND t.createdAt > :since
       """)
   List<Task> findIncompleteTasksCreatedSince(
-      @Param("userEmail") UUID userId, @Param("since") LocalDateTime since);
+      @Param("userId") UUID userId, @Param("since") LocalDateTime since);
 
   /*
    * Completed tasks completed between previous and freshest reports
@@ -64,7 +64,7 @@ public interface ReportRepository extends JpaRepository<Report, UUID> {
         AND t.completedAt <= :freshestReportTime
       """)
   List<Task> findCompletedTasksBetweenReports(
-      @Param("userEmail") UUID userId,
+      @Param("userId") UUID userId,
       @Param("previousReportTime") LocalDateTime previousReportTime,
       @Param("freshestReportTime") LocalDateTime freshestReportTime);
 
@@ -77,7 +77,7 @@ public interface ReportRepository extends JpaRepository<Report, UUID> {
       FROM Report r
       WHERE r.user.userId = :userId
       """)
-  LocalDateTime findFreshestReportCreatedAt(@Param("userEmail") UUID userId);
+  LocalDateTime findFreshestReportCreatedAt(@Param("userId") UUID userId);
 
   /*
    * Created_at time of previous report
@@ -93,5 +93,15 @@ public interface ReportRepository extends JpaRepository<Report, UUID> {
             WHERE r2.user.userId = :userId
         )
       """)
-  LocalDateTime findPreviousReportCreatedAt(@Param("userEmail") UUID userId);
+  LocalDateTime findPreviousReportCreatedAt(@Param("userId") UUID userId); /*
+   * Number of reports created by user
+   */
+
+  @Query(
+      """
+          SELECT COUNT(r)
+          FROM Report r
+          WHERE r.user.userId = :userId
+          """)
+  int countReportsByUserId(@Param("userId") UUID userId);
 }
