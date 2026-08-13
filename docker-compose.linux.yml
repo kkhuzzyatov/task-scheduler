@@ -76,7 +76,7 @@ services:
     platform: linux/amd64
     image: khuzzyatov/task_tracker_frontend:${IMAGE_TAG}
     build:
-      context: ./fronend
+      context: ./frontend
       dockerfile: Dockerfile
 
     depends_on:
