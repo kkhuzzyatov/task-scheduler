@@ -11,24 +11,20 @@ import task_scheduler.task_tracker_backend.task.Task;
 public interface ReportRepository extends JpaRepository<Report, UUID> {
 
   /*
-   * All tasks of user created since freshest report
+   * All tasks of user created since given report time
    */
   @Query(
       """
       SELECT t
       FROM Task t
       WHERE t.user.userId = :userId
-        AND t.createdAt >
-          (
-            SELECT COALESCE(MAX(r.createdAt), TIMESTAMP '1970-01-01 00:00:00')
-            FROM Report r
-            WHERE r.user.userId = :userId
-          )
+        AND t.createdAt > :since
       """)
-  List<Task> findTasksCreatedSinceFreshestReport(@Param("userId") UUID userId);
+  List<Task> findTasksCreatedSince(
+      @Param("userEmail") UUID userId, @Param("since") LocalDateTime since);
 
   /*
-   * Completed tasks of user completed since freshest report
+   * Completed tasks of user completed since given report time
    */
   @Query(
       """
@@ -36,17 +32,13 @@ public interface ReportRepository extends JpaRepository<Report, UUID> {
       FROM Task t
       WHERE t.user.userId = :userId
         AND t.completedAt IS NOT NULL
-        AND t.completedAt >
-          (
-            SELECT COALESCE(MAX(r.createdAt), TIMESTAMP '1970-01-01 00:00:00')
-            FROM Report r
-            WHERE r.user.userId = :userId
-          )
+        AND t.completedAt > :since
       """)
-  List<Task> findCompletedTasksSinceFreshestReport(@Param("userId") UUID userId);
+  List<Task> findCompletedTasksSince(
+      @Param("userEmail") UUID userId, @Param("since") LocalDateTime since);
 
   /*
-   * Incomplete tasks created since freshest report
+   * Incomplete tasks of user created since given report time
    */
   @Query(
       """
@@ -54,14 +46,10 @@ public interface ReportRepository extends JpaRepository<Report, UUID> {
       FROM Task t
       WHERE t.user.userId = :userId
         AND t.completedAt IS NULL
-        AND t.createdAt >
-          (
-            SELECT COALESCE(MAX(r.createdAt), TIMESTAMP '1970-01-01 00:00:00')
-            FROM Report r
-            WHERE r.user.userId = :userId
-          )
+        AND t.createdAt > :since
       """)
-  List<Task> findIncompleteTasksCreatedSinceFreshestReport(@Param("userId") UUID userId);
+  List<Task> findIncompleteTasksCreatedSince(
+      @Param("userEmail") UUID userId, @Param("since") LocalDateTime since);
 
   /*
    * Completed tasks completed between previous and freshest reports
@@ -72,29 +60,16 @@ public interface ReportRepository extends JpaRepository<Report, UUID> {
       FROM Task t
       WHERE t.user.userId = :userId
         AND t.completedAt IS NOT NULL
-        AND t.completedAt >
-          (
-            SELECT COALESCE(MAX(r2.createdAt), TIMESTAMP '1970-01-01 00:00:00')
-            FROM Report r2
-            WHERE r2.user.userId = :userId
-              AND r2.createdAt <
-                (
-                  SELECT MAX(r1.createdAt)
-                  FROM Report r1
-                  WHERE r1.user.userId = :userId
-                )
-          )
-        AND t.completedAt <=
-          (
-            SELECT MAX(r.createdAt)
-            FROM Report r
-            WHERE r.user.userId = :userId
-          )
+        AND t.completedAt > :previousReportTime
+        AND t.completedAt <= :freshestReportTime
       """)
-  List<Task> findCompletedTasksBetweenPreviousAndFreshestReport(@Param("userId") UUID userId);
+  List<Task> findCompletedTasksBetweenReports(
+      @Param("userEmail") UUID userId,
+      @Param("previousReportTime") LocalDateTime previousReportTime,
+      @Param("freshestReportTime") LocalDateTime freshestReportTime);
 
   /*
-   * Created_at of freshest report
+   * Created_at time of freshest report
    */
   @Query(
       """
@@ -102,5 +77,21 @@ public interface ReportRepository extends JpaRepository<Report, UUID> {
       FROM Report r
       WHERE r.user.userId = :userId
       """)
-  LocalDateTime findFreshestReportCreatedAt(@Param("userId") UUID userId);
+  LocalDateTime findFreshestReportCreatedAt(@Param("userEmail") UUID userId);
+
+  /*
+   * Created_at time of previous report
+   */
+  @Query(
+      """
+      SELECT MAX(r1.createdAt)
+      FROM Report r1
+      WHERE r1.user.userId = :userId
+        AND r1.createdAt < (
+            SELECT MAX(r2.createdAt)
+            FROM Report r2
+            WHERE r2.user.userId = :userId
+        )
+      """)
+  LocalDateTime findPreviousReportCreatedAt(@Param("userEmail") UUID userId);
 }

@@ -37,24 +37,32 @@ public class ReportService {
             ? 0
             : Duration.between(freshestReportTime, LocalDateTime.now()).getSeconds();
 
+    LocalDateTime freshestReportCreatedAt =
+        reportRepository.findFreshestReportCreatedAt(user.getUserId());
+    LocalDateTime previousReportCreatedAt =
+        reportRepository.findPreviousReportCreatedAt(user.getUserId());
+
     List<TaskSummaryDto> newTasksCreated =
-        reportRepository.findTasksCreatedSinceFreshestReport(user.getUserId()).stream()
+        reportRepository.findTasksCreatedSince(user.getUserId(), freshestReportCreatedAt).stream()
             .map(this::toSummary)
             .toList();
 
     List<TaskSummaryDto> newCompletedTasks =
-        reportRepository.findCompletedTasksSinceFreshestReport(user.getUserId()).stream()
+        reportRepository.findCompletedTasksSince(user.getUserId(), freshestReportCreatedAt).stream()
             .map(this::toSummary)
             .toList();
 
     List<TaskSummaryDto> newIncompleteTasks =
-        reportRepository.findIncompleteTasksCreatedSinceFreshestReport(user.getUserId()).stream()
+        reportRepository
+            .findIncompleteTasksCreatedSince(user.getUserId(), freshestReportCreatedAt)
+            .stream()
             .map(this::toSummary)
             .toList();
 
     List<TaskSummaryDto> tasksCompletedInPreviousReport =
         reportRepository
-            .findCompletedTasksBetweenPreviousAndFreshestReport(user.getUserId())
+            .findCompletedTasksBetweenReports(
+                user.getUserId(), previousReportCreatedAt, freshestReportCreatedAt)
             .stream()
             .map(this::toSummary)
             .toList();
