@@ -29,6 +29,8 @@ public class KafkaProducerConfig {
 
     props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
 
+    props.put(JsonSerializer.ADD_TYPE_INFO_HEADERS, false);
+
     return props;
   }
 
