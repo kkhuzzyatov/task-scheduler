@@ -104,3 +104,15 @@
     display: none;
   }
 }
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.reportButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

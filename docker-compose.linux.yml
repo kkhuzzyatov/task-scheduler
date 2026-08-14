@@ -1,7 +1,7 @@
 services:
   task-tracker-backend:
     platform: linux/amd64
-    image: khuzzyatov/task-tracker-backend:latest
+    image: khuzzyatov/task-tracker-backend:${IMAGE_TAG}
     build:
       context: ./task-tracker-backend
       dockerfile: Dockerfile
@@ -14,6 +14,7 @@ services:
       - "8080:8080"
     environment:
       INTERNAL_API_KEY: ${INTERNAL_API_KEY}
+      APP_FRONTEND_URL: ${APP_FRONTEND_URL}
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/backend_db
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
@@ -23,7 +24,7 @@ services:
 
   task-tracker-email-sender:
     platform: linux/amd64
-    image: khuzzyatov/task-tracker-email-sender:latest
+    image: khuzzyatov/task-tracker-email-sender:${IMAGE_TAG}
     build:
       context: ./task-tracker-email-sender
       dockerfile: Dockerfile
@@ -34,13 +35,15 @@ services:
       - "8081:8081"
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      UNISENDER_API_KEY: ${UNISENDER_API_KEY}
+      APP_URL: ${APP_URL}
 
 
-  task-tracker-summarization-server:
+  task-tracker-summarization-service:
     platform: linux/amd64
-    image: khuzzyatov/task-tracker-summarization-server:latest
+    image: khuzzyatov/task-tracker-summarization-service:${IMAGE_TAG}
     build:
-      context: ./task-tracker-summarization-server
+      context: ./task-tracker-summarization-service
       dockerfile: Dockerfile
     depends_on:
       kafka:
@@ -56,7 +59,7 @@ services:
 
   task-tracker-scheduler:
     platform: linux/amd64
-    image: khuzzyatov/task-tracker-scheduler:latest
+    image: khuzzyatov/task-tracker-scheduler:${IMAGE_TAG}
     build:
       context: ./task-tracker-scheduler
       dockerfile: Dockerfile
@@ -68,6 +71,23 @@ services:
     environment:
       INTERNAL_API_KEY: ${INTERNAL_API_KEY}
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+
+  frontend:
+    platform: linux/amd64
+    image: khuzzyatov/task_tracker_frontend:${IMAGE_TAG}
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+    depends_on:
+      - task-tracker-backend
+      - task-tracker-email-sender
+      - task-tracker-summarization-service
+      - task-tracker-scheduler
+
+    ports:
+      - "5173:80"
 
 
   postgres:

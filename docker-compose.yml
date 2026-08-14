@@ -12,6 +12,7 @@ services:
       - "8080:8080"
     environment:
       INTERNAL_API_KEY: ${INTERNAL_API_KEY}
+      APP_FRONTEND_URL: ${APP_FRONTEND_URL}
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/backend_db
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
@@ -30,11 +31,13 @@ services:
       - "8081:8081"
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      UNISENDER_API_KEY: ${UNISENDER_API_KEY}
+      APP_URL: ${APP_URL}
 
 
-  task-tracker-summarization-server:
+  task-tracker-summarization-service:
     build:
-      context: ./task-tracker-summarization-server
+      context: ./task-tracker-summarization-service
       dockerfile: Dockerfile
     depends_on:
       kafka:
@@ -60,6 +63,21 @@ services:
     environment:
       INTERNAL_API_KEY: ${INTERNAL_API_KEY}
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+    depends_on:
+      - task-tracker-backend
+      - task-tracker-email-sender
+      - task-tracker-summarization-service
+      - task-tracker-scheduler
+
+    ports:
+      - "5173:80"
 
 
   postgres:

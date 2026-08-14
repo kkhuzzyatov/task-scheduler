@@ -24,3 +24,11 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+
+unisender:
+  baseUrl: https://api.unisender.com/ru/api
+  apiKey: ${unisender.apiKey}
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %5p --- [%15.15t] %-40.40logger{39} : %m%n%kvp"

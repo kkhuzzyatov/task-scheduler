@@ -19,11 +19,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import task_scheduler.task_tracker_backend.filters.CorrelationIdFilter;
 import task_scheduler.task_tracker_backend.filters.InternalApiKeyFilter;
 import task_scheduler.task_tracker_backend.filters.JwtFilter;
+import task_scheduler.task_tracker_backend.properties.FrontendProperties;
 
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+  private final FrontendProperties frontendProperties;
   private final JwtFilter jwtFilter;
   private final InternalApiKeyFilter internalApiKeyFilter;
   private final CorrelationIdFilter correlationIdFilter;
@@ -84,7 +86,7 @@ public class SecurityConfig {
 
     CorsConfiguration config = new CorsConfiguration();
 
-    config.setAllowedOrigins(List.of("http://localhost:5173"));
+    config.setAllowedOrigins(List.of(frontendProperties.url()));
     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
     config.setAllowedHeaders(List.of("*"));
 

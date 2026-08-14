@@ -7,11 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import task_scheduler.task_tracker_backend.dto.auth.LoginResult;
-import task_scheduler.task_tracker_backend.dto.email.EmailTask;
+import task_scheduler.task_tracker_backend.dto.message.WelcomeMessage;
 import task_scheduler.task_tracker_backend.exception.UserAlreadyExistsException;
 import task_scheduler.task_tracker_backend.exception.UserIsNotExistException;
 import task_scheduler.task_tracker_backend.jwt.JwtProvider;
-import task_scheduler.task_tracker_backend.kafka.EmailProducer;
+import task_scheduler.task_tracker_backend.kafka.WelcomeMessageProducer;
 import task_scheduler.task_tracker_backend.properties.LogProperties;
 import task_scheduler.task_tracker_backend.user.User;
 import task_scheduler.task_tracker_backend.user.UserRepository;
@@ -29,7 +29,7 @@ public class AuthService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtProvider jwtProvider;
-  private final EmailProducer emailProducer;
+  private final WelcomeMessageProducer welcomeMessageProducer;
   private final LogProperties logProperties;
 
   public void register(String email, String password) {
@@ -57,13 +57,7 @@ public class AuthService {
         .addKeyValue(LOG_KEY_EMAIL, user.getEmail())
         .log("User registered successfully");
 
-    emailProducer.send(
-        EmailTask.builder()
-            .recipient(user.getEmail())
-            .subject("Welcome!")
-            .text("Спасибо за регистрацию!")
-            .build(),
-        user);
+    welcomeMessageProducer.send(WelcomeMessage.builder().email(user.getEmail()).build(), user);
   }
 
   public LoginResult login(String email, String password) {
