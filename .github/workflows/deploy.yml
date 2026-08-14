@@ -9,6 +9,19 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env:
+      IMAGE_TAG: ${{ github.sha }}
+      APP_FRONTEND_URL: ${{ secrets.APP_FRONTEND_URL }}
+      APP_URL: ${{ secrets.APP_URL }}
+      INTERNAL_API_KEY: ${{ secrets.INTERNAL_API_KEY }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      UNISENDER_API_KEY: ${{ secrets.UNISENDER_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_BASE_URL: ${{ secrets.OPENAI_BASE_URL }}
+      OPENAI_MODEL: ${{ secrets.OPENAI_MODEL }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -56,5 +69,8 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             cd /root/task-scheduler
+
+            export IMAGE_TAG=${{ github.sha }}
+
             docker compose -f docker-compose.prod.yml pull
             docker compose -f docker-compose.prod.yml up -d
