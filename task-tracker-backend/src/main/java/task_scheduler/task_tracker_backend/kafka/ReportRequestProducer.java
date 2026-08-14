@@ -14,7 +14,6 @@ import task_scheduler.task_tracker_backend.properties.LogProperties;
 public class ReportRequestProducer {
 
   private static final String TOPIC = "report-requests";
-  private static final String MESSAGE_ID_HEADER = "messageId";
 
   private final KafkaTemplate<String, Object> kafkaTemplate;
   private final LogProperties logProperties;

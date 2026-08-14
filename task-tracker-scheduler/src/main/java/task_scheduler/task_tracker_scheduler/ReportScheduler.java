@@ -17,7 +17,7 @@ public class ReportScheduler {
   private final LogProperties logProperties;
   private final InternalApiProperties internalApiProperties;
 
-  @Scheduled(cron = "0 0 * * * *")
+  @Scheduled(cron = "0 0 0 * * *")
   public void sendReport() {
     backendClient.sendReports(internalApiProperties.apiKey());
     log.atInfo()
